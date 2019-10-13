@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
-using Alamut.Abstractions.Structure;
 using Alamut.Data.Abstractions.Entity;
 using Alamut.Data.Abstractions.Paging;
 
@@ -14,7 +14,7 @@ namespace Alamut.Data.Abstractions.Repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public interface IRepository<TEntity,TKey> where TEntity : IEntity<TKey>
+    public interface IRepository<TEntity, in TKey> where TEntity : IEntity<TKey>
     {
         /// <summary>
         /// provide a queryable source of elements
@@ -23,188 +23,146 @@ namespace Alamut.Data.Abstractions.Repository
         IQueryable<TEntity> Queryable { get; }
 
         /// <summary>
-        /// get an item by id 
+        /// gets an Entity by id 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">entity key</param>
         /// <returns></returns>
         TEntity GetById(TKey id);
+        Task<TEntity> GetByIdAsync(TKey id);
 
         /// <summary>
-        /// get an item by predicate
+        /// gets an Entity filtered by predicate
         /// </summary>
         /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <returns>an entity or null</returns>
         TEntity Get(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
-        /// get an item (selected fields bye projection) by id
+        /// gets all Entities  
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        TResult Get<TResult>(TKey id);
-
-        /// <summary>
-        /// get an item (selected fields by projection) by predicate
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        TResult Get<TResult>(Expression<Func<TEntity, bool>> predicate);
-
-        /// <summary>
-        /// get all items 
-        /// </summary>
-        /// could be true, false, null
-        /// null -> not important 
         /// <returns></returns>
         List<TEntity> GetAll();
 
-        /// <summary>
-        /// get a list of projected item
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <returns></returns>
-        List<TResult> GetAll<TResult>();
-
+        Task<List<TEntity>> GetAllAsync();
 
         /// <summary>
-        /// get a list of items by predicate
+        /// get all Entities filtered by predicate
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
         List<TEntity> GetMany(Expression<Func<TEntity, bool>> predicate);
+        Task<List<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
-        /// get a list of items by ids
+        /// gets all entities filtered by provided ids
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
         List<TEntity> GetMany(IEnumerable<TKey> ids);
+        Task<List<TEntity>> GetManyAsync(IEnumerable<TKey> ids);
 
         /// <summary>
-        /// get a list of items (selected fields) by predicate
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        List<TResult> GetMany<TResult>(Expression<Func<TEntity, bool>> predicate);
-
-        /// <summary>
-        /// get filtered item
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="ids"></param>
-        /// <returns></returns>
-        List<TResult> GetMany<TResult>(IEnumerable<TKey> ids);
-
-
-        /// <summary>
-        /// get items paginated by criteria
+        /// gets a list of Entities in Paginated data-type filtered by provided criteria or default 
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
         IPaginated<TEntity> GetPaginated(IPaginatedCriteria criteria = null);
+        Task<IPaginated<TEntity>> GetPaginatedAsync(IPaginatedCriteria criteria = null);
 
         /// <summary>
-        /// create an item 
-        /// and commit into database.
+        /// adds an Entity to the context
+        /// and commit into database (if commit set to true).
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="commit">save changes into database</param>
         void Create(TEntity entity, bool commit = true);
+        Task CreateAsync(TEntity entity, bool commit = true);
+
 
         /// <summary>
-        /// add list of item into database
-        /// and commit into database.
+        /// adds a list of Entities to the context
+        /// and commit into database (if commit set to true).
         /// </summary>
         /// <param name="list"></param>
         /// <param name="commit"></param>
         void AddRange(IEnumerable<TEntity> list, bool commit = true);
+        Task AddRangeAsync(IEnumerable<TEntity> list, bool commit = true);
 
         /// <summary>
-        /// update item total value
-        /// and commit into database.
+        /// updates an item to the context
+        /// and commit into database (if commit set to true).
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="commit"></param>
         void Update(TEntity entity, bool commit = true);
+        Task UpdateAsync(TEntity entity, bool commit = true);
 
         /// <summary>
-        /// update an item (one field) by expression member selector by id
-        /// and commit into database.
+        /// updates an item (one field) by expression member selector filter by id
         /// </summary>
         /// <typeparam name="TField"></typeparam>
         /// <param name="id"></param>
         /// <param name="memberExpression"></param>
         /// <param name="value"></param>
+        /// <param name="commit">commit into database (if it sets to true)</param>
         /// <remarks>
         /// Even if multiple documents match the filter, only one will be updated because we used UpdateOne
         /// </remarks>
         void UpdateOne<TField>(TKey id, 
             Expression<Func<TEntity, TField>> memberExpression, 
-            TField value);
+            TField value, 
+            bool commit = true);
+        Task UpdateOneAsync<TField>(TKey id, 
+            Expression<Func<TEntity, TField>> memberExpression, 
+            TField value, 
+            bool commit = true);
 
         /// <summary>
-        /// update an item (one field) by expression member selector (select item by predicate)
-        /// and commit into database.
+        /// update an item (one field) by expression member selector filter by provided filterExpression predicate
         /// </summary>
         /// <typeparam name="TFilter"></typeparam>
         /// <typeparam name="TField"></typeparam>
         /// <param name="filterExpression"></param>
         /// <param name="memberExpression"></param>
         /// <param name="value"></param>
+        /// <param name="commit">commit into database (if it sets to true)</param>
         /// <remarks>
         /// Even if multiple documents match the filter, only one will be updated because we used UpdateOne
         /// </remarks>
         void UpdateOne<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression, 
-            Expression<Func<TEntity, TField>> memberExpression, TField value);
+            Expression<Func<TEntity, TField>> memberExpression, 
+            TField value,
+            bool commit = true);
+        Task UpdateOneAsync<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression, 
+            Expression<Func<TEntity, TField>> memberExpression, 
+            TField value,
+            bool commit = true);
 
         /// <summary>
-        /// update fieldset in the database by provided id
+        /// update fieldset (filed, value) in the database filter by id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="fieldset"></param>
+        /// <param name="commit">commit into database (if it sets to true)</param>
         /// <remarks>address no-sql data provider</remarks>
-        void GenericUpdate(TKey id, Dictionary<string, dynamic> fieldset);
+        void GenericUpdate(TKey id, Dictionary<string, dynamic> fieldset, bool commit = true);
+        Task GenericUpdateAsync(TKey id, Dictionary<string, dynamic> fieldset, bool commit = true);
 
         /// <summary>
-        /// add an item to a list (if not exist)
-        /// </summary>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="id"></param>
-        /// <param name="memberExpression"></param>
-        /// <param name="value"></param>
-        /// <remarks>address no-sql data provider</remarks>
-        void AddToList<TValue>(TKey id, 
-            Expression<Func<TEntity, IEnumerable<TValue>>> memberExpression, 
-            TValue value);
-
-        /// <summary>
-        /// remove an item from a list (all item if same)
-        /// </summary>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="id"></param>
-        /// <param name="memberExpression"></param>
-        /// <param name="value"></param>
-        /// <remarks>address no-sql data provider</remarks>
-        void RemoveFromList<TValue>(TKey id, 
-            Expression<Func<TEntity, IEnumerable<TValue>>> memberExpression, 
-            TValue value);
-
-        /// <summary>
-        /// Deletes an item by id.
+        /// deletes an Entity by id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="commit"></param> 
         void Delete(TKey id, bool commit = true);
+        Task DeleteAsync(TKey id, bool commit = true);
 
         /// <summary>
-        /// Deletes multiple documents.
+        /// deletes multiple documents filter by predicate.
         /// </summary>
         /// <param name="predicate">represent expression to filter delete</param>
-        /// <param name="commit"></param>
-        void DeleteMany(Expression<Func<TEntity, bool>> predicate
-            , bool commit = true);
+        /// <param name="commit">commit into database (if it sets to true)</param>
+        void DeleteMany(Expression<Func<TEntity, bool>> predicate, bool commit = true);
+        Task DeleteManyAsync(Expression<Func<TEntity, bool>> predicate, bool commit = true);
     }
 }
