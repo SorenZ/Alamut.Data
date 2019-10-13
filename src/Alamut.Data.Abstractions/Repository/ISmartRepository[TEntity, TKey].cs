@@ -58,5 +58,32 @@ namespace Alamut.Data.Abstractions.Repository
         /// <returns></returns>
         List<TResult> GetMany<TResult>(IEnumerable<TKey> ids);
         Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<TKey> ids);
+
+        /// <summary>
+        /// maps the provided DTO to the Entity and add it to the current context 
+        /// </summary>
+        /// <typeparam name="TDto"></typeparam>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        void Add<TDto>(TDto dto);
+
+        /// <summary>
+        /// maps the provided DTO to the Entity and add it to the underlying database
+        /// </summary>
+        /// <typeparam name="TDto"></typeparam>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task AddAndCommit<TDto>(TDto dto);
+
+        /// <summary>
+        /// try to find the Entity by provided id
+        /// if exist -> update it by provided DTO and commit it to database
+        /// if not exist -> maps the provided DTO to Entity and add it to database
+        /// </summary>
+        /// <typeparam name="TDto"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task AddOrUpdateAndCommit<TDto>(TKey id, TDto dto);
     }
 }
