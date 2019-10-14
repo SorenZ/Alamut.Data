@@ -30,46 +30,45 @@ namespace Alamut.Data.Repository
         /// <param name="id">entity key</param>
         /// <param name="cancellationToken"></param>
         /// <returns>an Entity or null</returns>
-        Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
+        Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets an Entity filtered by predicate
         /// </summary>
         /// <param name="predicate"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns>an entity or null</returns>
-        TEntity Get(Expression<Func<TEntity, bool>> predicate);
-        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+        Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets all Entities  
         /// </summary>
         /// <returns></returns>
-        List<TEntity> GetAll();
-        Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<TEntity>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets all Entities filtered by predicate
         /// </summary>
         /// <param name="predicate"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        List<TEntity> GetMany(Expression<Func<TEntity, bool>> predicate);
-        Task<List<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+        Task<List<TEntity>> GetMany(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets all entities filtered by provided ids
         /// </summary>
         /// <param name="ids"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        List<TEntity> GetMany(IEnumerable<TKey> ids);
-        Task<List<TEntity>> GetManyAsync(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
+        Task<List<TEntity>> GetMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets a list of Entities in Paginated data-type filtered by provided criteria or default 
         /// </summary>
         /// <param name="criteria"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        IPaginated<TEntity> GetPaginated(IPaginatedCriteria criteria = null);
-        Task<IPaginated<TEntity>> GetPaginatedAsync(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default);
+        Task<IPaginated<TEntity>> GetPaginated(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// adds an Entity to the current context

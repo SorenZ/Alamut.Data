@@ -22,7 +22,7 @@ namespace Alamut.Data.EF.Test
             var expected = DbHelper.Seed_SingleBlog(_dbContext);
 
             // act
-            var actual = await repository.GetByIdAsync(expected.Id);
+            var actual = await repository.GetById(expected.Id);
 
             // assert
             Assert.Equal(expected, actual);

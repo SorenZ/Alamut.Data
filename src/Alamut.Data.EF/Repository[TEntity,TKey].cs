@@ -30,47 +30,25 @@ namespace Alamut.Data.EF
 
         public virtual IQueryable<TEntity> Queryable => DbSet;
 
-        //public virtual TEntity GetById(TKey id) => DbSet.FirstOrDefault(q => q.Id.Equals(id));
-
-        public virtual async Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default) =>
+        public virtual async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default) =>
             await DbSet.FirstOrDefaultAsync(q => q.Id.Equals(id), cancellationToken);
 
-
-        public virtual TEntity Get(Expression<Func<TEntity, bool>> predicate) =>
-            DbSet.FirstOrDefault(predicate);
-
-
-        public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate,
+        public virtual async Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate,
             CancellationToken cancellationToken = default) =>
             await DbSet.FirstOrDefaultAsync(predicate, cancellationToken);
 
-        public virtual List<TEntity> GetAll() => DbSet.ToList();
-
-
-        public virtual async Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default) =>
+        public virtual async Task<List<TEntity>> GetAll(CancellationToken cancellationToken = default) =>
             await DbSet.ToListAsync(cancellationToken);
 
-
-        public virtual List<TEntity> GetMany(Expression<Func<TEntity, bool>> predicate) =>
-            DbSet.Where(predicate).ToList();
-
-
-        public virtual async Task<List<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> predicate,
+        public virtual async Task<List<TEntity>> GetMany(Expression<Func<TEntity, bool>> predicate,
             CancellationToken cancellationToken = default) =>
             await DbSet.Where(predicate).ToListAsync(cancellationToken);
 
-        public virtual List<TEntity> GetMany(IEnumerable<TKey> ids) =>
-            DbSet.Where(q => ids.Contains(q.Id)).ToList();
-
-
-        public virtual async Task<List<TEntity>> GetManyAsync(IEnumerable<TKey> ids,
+        public virtual async Task<List<TEntity>> GetMany(IEnumerable<TKey> ids,
             CancellationToken cancellationToken = default) =>
             await DbSet.Where(q => ids.Contains(q.Id)).ToListAsync(cancellationToken);
 
-        public virtual IPaginated<TEntity> GetPaginated(IPaginatedCriteria criteria = null) =>
-            DbSet.ToPaginated(criteria ?? new PaginatedCriteria());
-
-        public virtual async Task<IPaginated<TEntity>> GetPaginatedAsync(IPaginatedCriteria criteria = null,
+        public virtual async Task<IPaginated<TEntity>> GetPaginated(IPaginatedCriteria criteria = null,
             CancellationToken cancellationToken = default) =>
             await DbSet.ToPaginatedAsync(criteria ?? new PaginatedCriteria(), cancellationToken);
 
