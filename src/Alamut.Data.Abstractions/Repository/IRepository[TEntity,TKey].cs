@@ -78,41 +78,16 @@ namespace Alamut.Data.Abstractions.Repository
         void Add(TEntity entity);
 
         /// <summary>
-        /// adds an Entity to the underlying database
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> AddAndCommit(TEntity entity, CancellationToken cancellationToken = default);
-
-
-        /// <summary>
         /// adds a list of Entities to the current Context
         /// </summary>
         /// <param name="entities"></param>
         void AddRange(IEnumerable<TEntity> entities);
 
         /// <summary>
-        /// adds a list of Entities to the underlying Database
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> AddRangeAndCommit(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// updates an Entity to the current Context
         /// </summary>
         /// <param name="entity"></param>
         void Update(TEntity entity);
-
-        /// <summary>
-        /// update an Entity to the underlying Database
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> UpdateAndCommit(TEntity entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// updates an item (one field) by expression member selector filter by id
@@ -127,20 +102,6 @@ namespace Alamut.Data.Abstractions.Repository
         void UpdateById<TField>(TKey id,
             Expression<Func<TEntity, TField>> memberExpression,
             TField value);
-
-        /// <summary>
-        /// updates an item (one field) by expression member selector filter by id
-        /// and commit changes to underlying Database
-        /// </summary>
-        /// <typeparam name="TField"></typeparam>
-        /// <param name="id">the key</param>
-        /// <param name="memberExpression"></param>
-        /// <param name="value"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> UpdateByIdAndCommit<TField>(TKey id,
-            Expression<Func<TEntity, TField>> memberExpression,
-            TField value, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// update an item (one field) by expression member selector filter by provided filterExpression predicate
@@ -158,21 +119,6 @@ namespace Alamut.Data.Abstractions.Repository
             TField value);
 
         /// <summary>
-        /// update an item (one field) by expression member selector filter by provided filterExpression predicate
-        /// and commit changes to underlying Database
-        /// </summary>
-        /// <typeparam name="TFilter"></typeparam>
-        /// <typeparam name="TField"></typeparam>
-        /// <param name="filterExpression"></param>
-        /// <param name="memberExpression"></param>
-        /// <param name="value"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> UpdateOneAndCommit<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression, 
-            Expression<Func<TEntity, TField>> memberExpression, 
-            TField value, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// update fieldset (filed, value) in the database filter by id
         /// </summary>
         /// <param name="id"></param>
@@ -181,29 +127,10 @@ namespace Alamut.Data.Abstractions.Repository
         void GenericUpdate(TKey id, Dictionary<string, object> fieldset);
 
         /// <summary>
-        /// update fieldset (filed, value) in the database filter by id
-        /// and commit changes to underlying Database
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="fieldset"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> GenericUpdateAndCommit(TKey id, Dictionary<string, object> fieldset, 
-            CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// deletes an Entity by id in the current Context
         /// </summary>
         /// <param name="id">the key</param>
         void DeleteById(TKey id);
-
-        /// <summary>
-        /// deletes an Entity by id in the underlying Database
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> DeleteByIdAndCommit(TKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// deletes multiple Entities filter by predicate (in current Context)
@@ -212,12 +139,11 @@ namespace Alamut.Data.Abstractions.Repository
         void DeleteMany(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
-        /// deletes multiple Entities filter by predicate in underlying Database
+        /// commit changes to underlying database
         /// </summary>
-        /// <param name="predicate"></param>
         /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> DeleteManyAndCommit(Expression<Func<TEntity, bool>> predicate, 
-            CancellationToken cancellationToken = default);
+        /// <returns>if commit changes the state of the database return success Result, otherwise return error Result</returns>
+        Task<Result> CommitAsync(CancellationToken cancellationToken);
+
     }
 }

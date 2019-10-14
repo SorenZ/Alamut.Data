@@ -76,21 +76,7 @@ namespace Alamut.Data.EF
 
         public virtual void Add(TEntity entity) => DbSet.Add(entity);
         
-        public virtual async Task<Result> AddAndCommit(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            DbSet.Add(entity);
-            return await _dbContext.SaveChangeAndReturnResult(cancellationToken);
-        }
-
         public virtual void AddRange(IEnumerable<TEntity> entities) => DbSet.AddRange(entities);
-
-
-        public virtual async Task<Result> AddRangeAndCommit(IEnumerable<TEntity> entities,
-            CancellationToken cancellationToken = default)
-        {
-            await DbSet.AddRangeAsync(entities, cancellationToken);
-            return await _dbContext.SaveChangeAndReturnResult(cancellationToken);
-        }
 
         public virtual void Update(TEntity entity)
         {
@@ -102,12 +88,6 @@ namespace Alamut.Data.EF
             entry.State = EntityState.Modified;
         }
         
-        public virtual async Task<Result> UpdateAndCommit(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            this.Update(entity);
-            return await _dbContext.SaveChangeAndReturnResult(cancellationToken);
-        }
-
         public virtual void UpdateById<TField>(TKey id,
             Expression<Func<TEntity, TField>> memberExpression, TField value)
         {
@@ -119,14 +99,6 @@ namespace Alamut.Data.EF
             entity.GetType()
                 .GetProperty(memberName)
                 ?.SetValue(entity, value);
-        }
-
-        public virtual async Task<Result> UpdateByIdAndCommit<TField>(TKey id,
-            Expression<Func<TEntity, TField>> memberExpression,
-            TField value, CancellationToken cancellationToken = default)
-        {
-            this.UpdateById(id, memberExpression, value);
-            return await _dbContext.SaveChangeAndReturnResult(cancellationToken);
         }
 
         public virtual void UpdateOne<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression,
@@ -143,14 +115,6 @@ namespace Alamut.Data.EF
                 ?.SetValue(entity, value);
         }
 
-        public virtual async Task<Result> UpdateOneAndCommit<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression,
-            Expression<Func<TEntity, TField>> memberExpression,
-            TField value, CancellationToken cancellationToken = default)
-        {
-            UpdateOne<TFilter, TField>(filterExpression, memberExpression, value);
-            return await _dbContext.SaveChangeAndReturnResult(cancellationToken);
-        }
-
         public virtual void GenericUpdate(TKey id, Dictionary<string, object> fieldset)
         {
             var entity = DbSet.FirstOrDefault(q => q.Id.Equals(id))
@@ -165,13 +129,6 @@ namespace Alamut.Data.EF
             }
         }
 
-        public virtual async Task<Result> GenericUpdateAndCommit(TKey id, Dictionary<string, object> fieldset,
-            CancellationToken cancellationToken = default)
-        {
-            this.GenericUpdate(id, fieldset);
-            return await _dbContext.SaveChangeAndReturnResult(cancellationToken);
-        }
-
         public virtual void DeleteById(TKey id)
         {
             var entity = DbSet.FirstOrDefault(q => q.Id.Equals(id))
@@ -181,23 +138,13 @@ namespace Alamut.Data.EF
             DbSet.Remove(entity);
         }
 
-        public virtual async Task<Result> DeleteByIdAndCommit(TKey id, CancellationToken cancellationToken = default)
-        {
-            this.DeleteById(id);
-            return await _dbContext.SaveChangeAndReturnResult(cancellationToken);
-        }
-
         public virtual void DeleteMany(Expression<Func<TEntity, bool>> predicate)
         {
             var entities = DbSet.Where(predicate);
             DbSet.RemoveRange(entities);
         }
 
-        public virtual async Task<Result> DeleteManyAndCommit(Expression<Func<TEntity, bool>> predicate,
-            CancellationToken cancellationToken = default)
-        {
-            DeleteMany(predicate);
-            return await _dbContext.SaveChangeAndReturnResult(cancellationToken);
-        }
+        public virtual Task<Result> CommitAsync(CancellationToken cancellationToken) => 
+            _dbContext.SaveChangeAndReturnResult(cancellationToken);
     }
 }
