@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Alamut.Data.Abstractions.Paging
+namespace Alamut.Data.Paging
 {
     public interface IPaginated<T> : IPaginated
     {

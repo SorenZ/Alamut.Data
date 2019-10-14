@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Alamut.Data.Abstractions.Sql
+namespace Alamut.Data.Sql
 {
     /// <summary>
     /// Represents a unit of work.

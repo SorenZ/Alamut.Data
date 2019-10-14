@@ -6,10 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Alamut.Abstractions.Structure;
-using Alamut.Data.Abstractions.Entity;
-using Alamut.Data.Abstractions.Paging;
+using Alamut.Data.Entity;
+using Alamut.Data.Paging;
 
-namespace Alamut.Data.Abstractions.Repository
+namespace Alamut.Data.Repository
 {
     /// <summary>
     /// represents complete repository methods to query and manipulate the context or underlying database

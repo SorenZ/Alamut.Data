@@ -1,4 +1,4 @@
-﻿namespace Alamut.Data.Abstractions.Paging
+﻿namespace Alamut.Data.Paging
 {
     /// <summary>
     /// Represents the criteria used to show a paginated data.

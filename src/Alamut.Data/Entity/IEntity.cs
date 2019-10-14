@@ -1,4 +1,4 @@
-﻿namespace Alamut.Data.Abstractions.Entity
+﻿namespace Alamut.Data.Entity
 {
     /// <summary>
     /// provides base Entity type with int Id as key

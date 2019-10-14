@@ -1,4 +1,4 @@
-﻿namespace Alamut.Data.Abstractions.Entity
+﻿namespace Alamut.Data.Entity
 {
     /// <summary>
     /// provide base interface of an entity

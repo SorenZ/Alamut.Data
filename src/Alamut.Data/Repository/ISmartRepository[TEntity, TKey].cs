@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-using Alamut.Data.Abstractions.Entity;
+using Alamut.Data.Entity;
 
-namespace Alamut.Data.Abstractions.Repository
+namespace Alamut.Data.Repository
 {
     /// <summary>
     /// provides repository helpers based on AutoMapper mapping configuration 

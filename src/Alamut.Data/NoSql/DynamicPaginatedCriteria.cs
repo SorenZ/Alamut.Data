@@ -1,6 +1,6 @@
-﻿using Alamut.Data.Abstractions.Paging;
+﻿using Alamut.Data.Paging;
 
-namespace Alamut.Data.Abstractions.NoSql
+namespace Alamut.Data.NoSql
 {
     public class DynamicPaginatedCriteria : DynamicCriteria, IPaginatedCriteria
     {

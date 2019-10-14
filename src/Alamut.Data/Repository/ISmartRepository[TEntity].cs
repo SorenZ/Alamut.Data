@@ -1,6 +1,6 @@
-﻿using Alamut.Data.Abstractions.Entity;
+﻿using Alamut.Data.Entity;
 
-namespace Alamut.Data.Abstractions.Repository
+namespace Alamut.Data.Repository
 {
     public interface ISmartRepository<TEntity> : IRepository<TEntity, int>
         where TEntity : IEntity

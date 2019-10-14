@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Alamut.Data.Abstractions.Paging
+namespace Alamut.Data.Paging
 {
     public static class QueryablePaginatedExtensions
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-using Alamut.Data.Abstractions.Entity;
+using Alamut.Data.Entity;
 
-namespace Alamut.Data.Abstractions.Repository
+namespace Alamut.Data.Repository
 {
     public interface INoSqlRepository<TEntity, in TKey> : IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
     {

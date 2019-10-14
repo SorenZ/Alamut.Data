@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Alamut.Data.Abstractions.NoSql
+namespace Alamut.Data.NoSql
 {
     /// <summary>
     /// determine criteria for
