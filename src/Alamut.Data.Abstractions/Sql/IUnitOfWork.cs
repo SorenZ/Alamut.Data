@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Alamut.Data.Abstractions.Sql
@@ -9,8 +10,8 @@ namespace Alamut.Data.Abstractions.Sql
     public interface IUnitOfWork : IDisposable
     {
         void Commit();
-        Task CommitAsync();
+        Task CommitAsync(CancellationToken cancellationToken = default);
         void RollBack();
-        Task RollBackAsync();
+        Task RollBackAsync(CancellationToken cancellationToken = default);
     }
 }

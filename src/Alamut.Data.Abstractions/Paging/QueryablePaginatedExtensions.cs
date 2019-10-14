@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,13 +54,14 @@ namespace Alamut.Data.Abstractions.Paging
         /// <typeparam name="T"></typeparam>
         /// <param name="query">The query.</param>
         /// <param name="paginatedCriteria">The paginated criteria.</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task<IPaginated<T>> ToPaginatedAsync<T>(this IQueryable<T> query, 
-        IPaginatedCriteria paginatedCriteria)
+        IPaginatedCriteria paginatedCriteria, CancellationToken cancellationToken = default)
         {
             return new Paginated<T>(
-                await query.ToPage(paginatedCriteria.StartIndex, paginatedCriteria.PageSize).ToListAsync(),
-                await query.CountAsync(),
+                await query.ToPage(paginatedCriteria.StartIndex, paginatedCriteria.PageSize).ToListAsync(cancellationToken),
+                await query.CountAsync(cancellationToken),
                 paginatedCriteria.CurrentPage,
                 paginatedCriteria.PageSize);
         }

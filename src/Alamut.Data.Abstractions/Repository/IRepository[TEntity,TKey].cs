@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
+using Alamut.Abstractions.Structure;
 using Alamut.Data.Abstractions.Entity;
 using Alamut.Data.Abstractions.Paging;
 
@@ -28,7 +30,7 @@ namespace Alamut.Data.Abstractions.Repository
         /// <param name="id">entity key</param>
         /// <returns>an Entity or null</returns>
         TEntity GetById(TKey id);
-        Task<TEntity> GetByIdAsync(TKey id);
+        Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets an Entity filtered by predicate
@@ -36,14 +38,14 @@ namespace Alamut.Data.Abstractions.Repository
         /// <param name="predicate"></param>
         /// <returns>an entity or null</returns>
         TEntity Get(Expression<Func<TEntity, bool>> predicate);
-        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets all Entities  
         /// </summary>
         /// <returns></returns>
         List<TEntity> GetAll();
-        Task<List<TEntity>> GetAllAsync();
+        Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets all Entities filtered by predicate
@@ -51,7 +53,7 @@ namespace Alamut.Data.Abstractions.Repository
         /// <param name="predicate"></param>
         /// <returns></returns>
         List<TEntity> GetMany(Expression<Func<TEntity, bool>> predicate);
-        Task<List<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<List<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets all entities filtered by provided ids
@@ -59,7 +61,7 @@ namespace Alamut.Data.Abstractions.Repository
         /// <param name="ids"></param>
         /// <returns></returns>
         List<TEntity> GetMany(IEnumerable<TKey> ids);
-        Task<List<TEntity>> GetManyAsync(IEnumerable<TKey> ids);
+        Task<List<TEntity>> GetManyAsync(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets a list of Entities in Paginated data-type filtered by provided criteria or default 
@@ -67,34 +69,36 @@ namespace Alamut.Data.Abstractions.Repository
         /// <param name="criteria"></param>
         /// <returns></returns>
         IPaginated<TEntity> GetPaginated(IPaginatedCriteria criteria = null);
-        Task<IPaginated<TEntity>> GetPaginatedAsync(IPaginatedCriteria criteria = null);
+        Task<IPaginated<TEntity>> GetPaginatedAsync(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// adds an Entity to the current context
         /// </summary>
         /// <param name="entity"></param>
-        void Create(TEntity entity);
-        
+        void Add(TEntity entity);
+
         /// <summary>
         /// adds an Entity to the underlying database
         /// </summary>
         /// <param name="entity"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task CreateAndCommit(TEntity entity);
+        Task<Result> AddAndCommit(TEntity entity, CancellationToken cancellationToken = default);
 
 
         /// <summary>
         /// adds a list of Entities to the current Context
         /// </summary>
-        /// <param name="list"></param>
-        void AddRange(IEnumerable<TEntity> list);
-        
+        /// <param name="entities"></param>
+        void AddRange(IEnumerable<TEntity> entities);
+
         /// <summary>
         /// adds a list of Entities to the underlying Database
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="entities"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task AddRangeAndCommit(IEnumerable<TEntity> list);
+        Task<Result> AddRangeAndCommit(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// updates an Entity to the current Context
@@ -106,8 +110,9 @@ namespace Alamut.Data.Abstractions.Repository
         /// update an Entity to the underlying Database
         /// </summary>
         /// <param name="entity"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UpdateAndCommit(TEntity entity);
+        Task<Result> UpdateAndCommit(TEntity entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// updates an item (one field) by expression member selector filter by id
@@ -119,7 +124,7 @@ namespace Alamut.Data.Abstractions.Repository
         /// <remarks>
         /// Even if multiple documents match the filter, only one will be updated because we used UpdateOne
         /// </remarks>
-        void UpdateOne<TField>(TKey id,
+        void UpdateById<TField>(TKey id,
             Expression<Func<TEntity, TField>> memberExpression,
             TField value);
 
@@ -131,12 +136,11 @@ namespace Alamut.Data.Abstractions.Repository
         /// <param name="id">the key</param>
         /// <param name="memberExpression"></param>
         /// <param name="value"></param>
-        /// <param name="commit"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UpdateOneAndCommit<TField>(TKey id,
+        Task<Result> UpdateByIdAndCommit<TField>(TKey id,
             Expression<Func<TEntity, TField>> memberExpression,
-            TField value,
-            bool commit = true);
+            TField value, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// update an item (one field) by expression member selector filter by provided filterExpression predicate
@@ -162,10 +166,11 @@ namespace Alamut.Data.Abstractions.Repository
         /// <param name="filterExpression"></param>
         /// <param name="memberExpression"></param>
         /// <param name="value"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UpdateOneAndCommit<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression, 
+        Task<Result> UpdateOneAndCommit<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression, 
             Expression<Func<TEntity, TField>> memberExpression, 
-            TField value);
+            TField value, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// update fieldset (filed, value) in the database filter by id
@@ -181,21 +186,24 @@ namespace Alamut.Data.Abstractions.Repository
         /// </summary>
         /// <param name="id"></param>
         /// <param name="fieldset"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task GenericUpdateAndCommit(TKey id, Dictionary<string, object> fieldset);
+        Task<Result> GenericUpdateAndCommit(TKey id, Dictionary<string, object> fieldset, 
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// deletes an Entity by id in the current Context
         /// </summary>
         /// <param name="id">the key</param>
         void DeleteById(TKey id);
-        
+
         /// <summary>
         /// deletes an Entity by id in the underlying Database
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task DeleteByIdAndCommit(TKey id);
+        Task<Result> DeleteByIdAndCommit(TKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// deletes multiple Entities filter by predicate (in current Context)
@@ -207,7 +215,9 @@ namespace Alamut.Data.Abstractions.Repository
         /// deletes multiple Entities filter by predicate in underlying Database
         /// </summary>
         /// <param name="predicate"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task DeleteManyAndCommit(Expression<Func<TEntity, bool>> predicate);
+        Task<Result> DeleteManyAndCommit(Expression<Func<TEntity, bool>> predicate, 
+            CancellationToken cancellationToken = default);
     }
 }
