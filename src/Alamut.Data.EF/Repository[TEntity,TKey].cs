@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Alamut.Abstractions.Structure;
-using Alamut.Data.Abstractions.Entity;
-using Alamut.Data.Abstractions.Paging;
-using Alamut.Data.Abstractions.Repository;
+using Alamut.Data.Entity;
+using Alamut.Data.Paging;
+using Alamut.Data.Repository;
 using Alamut.Helpers.Linq;
 
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,7 @@ namespace Alamut.Data.EF
 
         public virtual IQueryable<TEntity> Queryable => DbSet;
 
-        public virtual TEntity GetById(TKey id) => DbSet.FirstOrDefault(q => q.Id.Equals(id));
+        //public virtual TEntity GetById(TKey id) => DbSet.FirstOrDefault(q => q.Id.Equals(id));
 
         public virtual async Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default) =>
             await DbSet.FirstOrDefaultAsync(q => q.Id.Equals(id), cancellationToken);

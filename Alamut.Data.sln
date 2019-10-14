@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alamut.Data.EF", "src\Alamu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alamut.Data", "src\Alamut.Data\Alamut.Data.csproj", "{41932082-BD5C-4196-A056-036798217B8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alamut.Data.EF.Test", "test\Alamut.Data.EF.Test\Alamut.Data.EF.Test.csproj", "{02704B20-3021-4BF1-A5CC-3BC3EE62B10F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{41932082-BD5C-4196-A056-036798217B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41932082-BD5C-4196-A056-036798217B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41932082-BD5C-4196-A056-036798217B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02704B20-3021-4BF1-A5CC-3BC3EE62B10F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02704B20-3021-4BF1-A5CC-3BC3EE62B10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02704B20-3021-4BF1-A5CC-3BC3EE62B10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02704B20-3021-4BF1-A5CC-3BC3EE62B10F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BAF5D4DA-E3AC-4480-95D2-2846D2CEB774} = {D34DEEBF-3E38-48BE-B1B8-F8B593AD38C1}
 		{41932082-BD5C-4196-A056-036798217B8F} = {D34DEEBF-3E38-48BE-B1B8-F8B593AD38C1}
+		{02704B20-3021-4BF1-A5CC-3BC3EE62B10F} = {85E07C5D-AB79-4D5A-868F-1FB41286B136}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4830CF1-38D3-4382-B51F-D8BE4F472073}

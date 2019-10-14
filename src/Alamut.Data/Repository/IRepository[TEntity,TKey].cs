@@ -28,8 +28,8 @@ namespace Alamut.Data.Repository
         /// gets an Entity by id 
         /// </summary>
         /// <param name="id">entity key</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>an Entity or null</returns>
-        TEntity GetById(TKey id);
         Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
