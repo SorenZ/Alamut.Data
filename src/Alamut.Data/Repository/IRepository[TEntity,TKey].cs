@@ -76,14 +76,13 @@ namespace Alamut.Data.Repository
         /// <remarks>
         /// Even if multiple documents match the filter, only one will be updated because we used UpdateOne
         /// </remarks>
-        void UpdateById<TField>(TKey id,
+        void UpdateFieldById<TField>(TKey id,
             Expression<Func<TEntity, TField>> memberExpression,
             TField value);
 
         /// <summary>
         /// update an item (one field) by expression member selector filter by provided filterExpression predicate
         /// </summary>
-        /// <typeparam name="TFilter"></typeparam>
         /// <typeparam name="TField"></typeparam>
         /// <param name="filterExpression"></param>
         /// <param name="memberExpression"></param>
@@ -91,7 +90,7 @@ namespace Alamut.Data.Repository
         /// <remarks>
         /// Even if multiple documents match the filter, only one will be updated because we used UpdateOne
         /// </remarks>
-        void UpdateOne<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression, 
+        void UpdateField<TField>(Expression<Func<TEntity, bool>> filterExpression, 
             Expression<Func<TEntity, TField>> memberExpression, 
             TField value);
 

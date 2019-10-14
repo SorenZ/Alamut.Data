@@ -55,7 +55,7 @@ namespace Alamut.Data.EF
             entry.State = EntityState.Modified;
         }
         
-        public virtual void UpdateById<TField>(TKey id,
+        public virtual void UpdateFieldById<TField>(TKey id,
             Expression<Func<TEntity, TField>> memberExpression, TField value)
         {
             var entity = DbSet.FirstOrDefault(q => q.Id.Equals(id))
@@ -63,12 +63,13 @@ namespace Alamut.Data.EF
                              $"there is no item in {typeof(TEntity).Name} with id : {id}");
 
             var memberName = LambdaExpressions.GetName(memberExpression);
+
             entity.GetType()
                 .GetProperty(memberName)
                 ?.SetValue(entity, value);
         }
 
-        public virtual void UpdateOne<TFilter, TField>(Expression<Func<TEntity, bool>> filterExpression,
+        public virtual void UpdateField<TField>(Expression<Func<TEntity, bool>> filterExpression,
             Expression<Func<TEntity, TField>> memberExpression,
             TField value)
         {

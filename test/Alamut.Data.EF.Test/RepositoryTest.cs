@@ -1,9 +1,13 @@
-using System;
+// ReSharper disable RedundantArgumentDefaultValue
+
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Alamut.Data.EF.Test.Database;
 using Alamut.Data.Paging;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
+
 
 namespace Alamut.Data.EF.Test
 {
@@ -123,6 +127,178 @@ namespace Alamut.Data.EF.Test
             Assert.Equal(expected, actual, new PaginatedEqualityComparer<Blog>());
         }
 
-        
+        [Fact]
+        public void Repository_AddEntity_EntityAdded()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
+            var expected = new Blog
+            {
+                Url = "https://github.com/SorenZ/Alamut.DotNet",
+                Rating = 5
+            };
+
+            // act
+            repository.Add(expected);
+            var entry = _dbContext.Entry(expected);
+
+            // assert
+            Assert.True(entry.State == EntityState.Added);
+        }
+
+
+        [Fact]
+        public async void Repository_AddEntityAndCommit_EntityAddedToDatabase()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
+            var expected = new Blog
+            {
+                Url = "https://github.com/SorenZ/Alamut.DotNet",
+                Rating = 5
+            };
+
+            // act
+            repository.Add(expected);
+            await repository.CommitAsync(CancellationToken.None);
+
+            // assert
+            Assert.Contains(expected, _dbContext.Blogs);
+        }
+
+        [Fact]
+        public async void Repository_AddRangeAndCommit_EntitiesAddedToDatabase()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
+            var expected = new[]
+            {
+                new Blog
+                {
+                    Url = "https://github.com/SorenZ/Alamut.Data",
+                    Rating = 5
+                },
+                new Blog
+                {
+                    Url = "https://github.com/SorenZ/Alamut.AspNet",
+                    Rating = 4
+                }
+            };
+
+            // act
+            repository.AddRange(expected);
+            await repository.CommitAsync(CancellationToken.None);
+
+            // assert
+            Assert.Contains(expected.First(), _dbContext.Blogs);
+            Assert.Contains(expected.Last(), _dbContext.Blogs);
+        }
+
+        [Fact]
+        public void Repository_UpdateEntity_EntityUpdated()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+
+            // act
+            expected.Rating = 10;
+            repository.Update(expected);
+
+            var entry = _dbContext.Entry(expected);
+
+            // assert
+            Assert.True(entry.State == EntityState.Modified);
+            Assert.Contains(expected, _dbContext.Blogs);
+        }
+
+        [Fact]
+        public void Repository_UpdateUnAttachedEntity_EntityUpdated()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            var entity = DbHelper.Seed_SingleBlog(_dbContext);
+            _dbContext.Entry(entity).State = EntityState.Detached;
+            
+            var expected = new Blog
+            {
+                Id = entity.Id,
+                Rating = 10,
+                Posts = null,
+                Url = entity.Url
+            };
+
+            // act
+            repository.Update(expected);
+
+            // assert
+            Assert.Contains(expected, _dbContext.Blogs);
+        }
+
+        [Fact]
+        public void Repository_UpdateFieldById_EntityUpdated()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
+            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+
+            // act
+            repository.UpdateFieldById(expected.Id, blog => blog.Rating, 100);
+            
+            var entry = _dbContext.Entry(expected);
+
+            // assert
+            Assert.True(entry.State == EntityState.Modified);
+            Assert.Equal(expected.Rating, _dbContext.Blogs.First().Rating);
+        }
+
+        [Fact]
+        public void Repository_UpdateField_EntityUpdated()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
+            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+
+            // act
+            repository.UpdateField(blog => blog.Id == expected.Id, blog => blog.Rating, 100);
+            
+            var entry = _dbContext.Entry(expected);
+
+            // assert
+            Assert.True(entry.State == EntityState.Modified);
+            Assert.Equal(expected.Rating, _dbContext.Blogs.First().Rating);
+        }
+
+        [Fact]
+        public void Repository_GenericUpdate_EntityUpdated()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
+            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+            var fieldset = new Dictionary<string, object>
+            {
+                {"Rating", 100},
+                {"Url", "test"}
+            };
+            
+
+            // act
+            repository.GenericUpdate(expected.Id, fieldset);
+            
+            var entry = _dbContext.Entry(expected);
+            var actual = repository.GetById(expected.Id).Result;
+
+            // assert
+            Assert.True(entry.State == EntityState.Modified);
+            Assert.Equal(100, actual.Rating);
+            Assert.Equal("test", actual.Url);
+
+        }
     }
 }
