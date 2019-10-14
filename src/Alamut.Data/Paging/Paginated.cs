@@ -45,7 +45,7 @@ namespace Alamut.Data.Paging
         /// Gets or sets the index of the current page.
         /// </summary>
         /// <value> The index of the current page. </value>
-        public int CurrentPage { get; set; }
+        public int CurrentPage { get;}
 
         /// <summary>
         /// Gets the page count.

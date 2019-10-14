@@ -33,34 +33,12 @@ namespace Alamut.Data.Repository
         Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// gets an Entity filtered by predicate
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>an entity or null</returns>
-        Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// gets all Entities  
-        /// </summary>
-        /// <returns></returns>
-        Task<List<TEntity>> GetAll(CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// gets all Entities filtered by predicate
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<List<TEntity>> GetMany(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// gets all entities filtered by provided ids
         /// </summary>
         /// <param name="ids"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<List<TEntity>> GetMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
+        Task<List<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// gets a list of Entities in Paginated data-type filtered by provided criteria or default 

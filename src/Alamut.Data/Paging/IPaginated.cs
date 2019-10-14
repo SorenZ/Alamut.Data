@@ -16,7 +16,7 @@ namespace Alamut.Data.Paging
         /// Gets or sets the current page.
         /// </summary>
         /// <value> The current page. </value>
-        int CurrentPage { get; set; }
+        int CurrentPage { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is first page.

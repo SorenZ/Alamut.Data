@@ -33,18 +33,7 @@ namespace Alamut.Data.EF
         public virtual async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default) =>
             await DbSet.FirstOrDefaultAsync(q => q.Id.Equals(id), cancellationToken);
 
-        public virtual async Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate,
-            CancellationToken cancellationToken = default) =>
-            await DbSet.FirstOrDefaultAsync(predicate, cancellationToken);
-
-        public virtual async Task<List<TEntity>> GetAll(CancellationToken cancellationToken = default) =>
-            await DbSet.ToListAsync(cancellationToken);
-
-        public virtual async Task<List<TEntity>> GetMany(Expression<Func<TEntity, bool>> predicate,
-            CancellationToken cancellationToken = default) =>
-            await DbSet.Where(predicate).ToListAsync(cancellationToken);
-
-        public virtual async Task<List<TEntity>> GetMany(IEnumerable<TKey> ids,
+        public virtual async Task<List<TEntity>> GetByIds(IEnumerable<TKey> ids,
             CancellationToken cancellationToken = default) =>
             await DbSet.Where(q => ids.Contains(q.Id)).ToListAsync(cancellationToken);
 
