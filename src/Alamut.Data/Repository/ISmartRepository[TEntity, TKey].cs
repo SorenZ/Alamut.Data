@@ -73,7 +73,7 @@ namespace Alamut.Data.Repository
         /// </summary>
         /// <typeparam name="TDto"></typeparam>
         /// <param name="dto"></param>
-        /// <returns></returns>
+        /// <returns>generated Entity based on provided DTO</returns>
         TEntity Add<TDto>(TDto dto);
 
 
@@ -81,6 +81,7 @@ namespace Alamut.Data.Repository
         /// maps the provided DTO to the Entity and update it to the current context 
         /// </summary>
         /// <param name="dto"></param>
+        /// <returns>generated Entity based on provided DTO</returns>
         TEntity Update<TDto>(TDto dto);
 
         // ReSharper disable once InvalidXmlDocComment
