@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Alamut.Data.Entity;
@@ -16,48 +17,47 @@ namespace Alamut.Data.Repository
         where TEntity : IEntity<TKey>
     {
         /// <summary>
-        /// gets an item (mapped to provided TResult) by id
+        /// gets an item (mapped to provided TDto) by id
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TDto"></typeparam>
         /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        TResult GetById<TResult>(TKey id);
-        Task<TResult> GetByIdAsync<TResult>(TKey id);
+        Task<TDto> GetById<TDto>(TKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// gets an item (mapped to provided TResult) filter by provided predicate 
+        /// gets an item (mapped to provided TDto) filter by provided predicate 
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TDto"></typeparam>
         /// <param name="predicate"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        TResult Get<TResult>(Expression<Func<TEntity, bool>> predicate);
-        Task<TResult> GetAsync<TResult>(Expression<Func<TEntity, bool>> predicate);
+        Task<TDto> Get<TDto>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// gets all items (mapped to provided TResult)  
+        /// gets all items (mapped to provided TDto)  
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TDto"></typeparam>
         /// <returns></returns>
-        List<TResult> GetAll<TResult>();
-        Task<List<TResult>> GetAllAsync<TResult>();
+        Task<List<TDto>> GetAll<TDto>(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// gets a list of items (mapped to provided TResult) filter by provided predicate
+        /// gets a list of items (mapped to provided TDto) filter by provided predicate
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TDto"></typeparam>
         /// <param name="predicate"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        List<TResult> GetMany<TResult>(Expression<Func<TEntity, bool>> predicate);
-        Task<List<TResult>> GetManyAsync<TResult>(Expression<Func<TEntity, bool>> predicate);
+        Task<List<TDto>> GetMany<TDto>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// gets a list of items (mapped to provided TResult) filter by provided ids
+        /// gets a list of items (mapped to provided TDto) filter by provided ids
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TDto"></typeparam>
         /// <param name="ids"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        List<TResult> GetMany<TResult>(IEnumerable<TKey> ids);
-        Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<TKey> ids);
+        Task<List<TDto>> GetByIds<TDto>(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// maps the provided DTO to the Entity and add it to the current context 
@@ -65,25 +65,25 @@ namespace Alamut.Data.Repository
         /// <typeparam name="TDto"></typeparam>
         /// <param name="dto"></param>
         /// <returns></returns>
-        void Add<TDto>(TDto dto);
+        Task Add<TDto>(TDto dto);
+
 
         /// <summary>
-        /// maps the provided DTO to the Entity and add it to the underlying database
+        /// maps the provided DTO to the Entity and update it to the current context 
         /// </summary>
-        /// <typeparam name="TDto"></typeparam>
         /// <param name="dto"></param>
-        /// <returns></returns>
-        Task AddAndCommit<TDto>(TDto dto);
+        void Update<TDto>(TDto dto);
 
+        // ReSharper disable once InvalidXmlDocComment
         /// <summary>
         /// try to find the Entity by provided id
-        /// if exist -> update it by provided DTO and commit it to database
-        /// if not exist -> maps the provided DTO to Entity and add it to database
+        /// if exist -> update it by provided DTO 
+        /// if not exist -> maps the provided DTO to Entity 
         /// </summary>
         /// <typeparam name="TDto"></typeparam>
         /// <param name="id"></param>
         /// <param name="dto"></param>
         /// <returns></returns>
-        Task AddOrUpdateAndCommit<TDto>(TKey id, TDto dto);
+        //Task AddOrUpdate<TDto>(TKey id, TDto dto);
     }
 }
