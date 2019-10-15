@@ -109,6 +109,12 @@ namespace Alamut.Data.Repository
         void DeleteById(TKey id);
 
         /// <summary>
+        /// deletes an Entity by changing the state of it
+        /// </summary>
+        /// <param name="entity"></param>
+        void Delete(TEntity entity);
+
+        /// <summary>
         /// deletes multiple Entities filter by predicate (in current Context)
         /// </summary>
         /// <param name="predicate">represent expression to filter delete</param>

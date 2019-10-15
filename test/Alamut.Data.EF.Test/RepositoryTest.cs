@@ -39,7 +39,7 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
-            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
             var actual = repository.Queryable;
@@ -53,7 +53,7 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
-            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
             var actual = await repository.GetById(expected.Id);
@@ -67,7 +67,7 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
-            DbHelper.Seed_SingleBlog(_dbContext);
+            DbHelper.SeedSingleBlog(_dbContext);
 
             // act
             var actual = await repository.GetById(0);
@@ -81,8 +81,8 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
-            var entity1 = DbHelper.Seed_SingleBlog(_dbContext);
-            var entity2 = DbHelper.Seed_SingleBlog(_dbContext);
+            var entity1 = DbHelper.SeedSingleBlog(_dbContext);
+            var entity2 = DbHelper.SeedSingleBlog(_dbContext);
             var ids = new[] {entity1.Id, entity2.Id};
 
 
@@ -202,7 +202,7 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
-            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
             expected.Rating = 10;
@@ -220,7 +220,7 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
-            var entity = DbHelper.Seed_SingleBlog(_dbContext);
+            var entity = DbHelper.SeedSingleBlog(_dbContext);
             _dbContext.Entry(entity).State = EntityState.Detached;
             
             var expected = new Blog
@@ -244,7 +244,7 @@ namespace Alamut.Data.EF.Test
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
             DbHelper.CleanBlog(_dbContext);
-            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
             repository.UpdateFieldById(expected.Id, blog => blog.Rating, 100);
@@ -262,7 +262,7 @@ namespace Alamut.Data.EF.Test
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
             DbHelper.CleanBlog(_dbContext);
-            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
             repository.UpdateField(blog => blog.Id == expected.Id, blog => blog.Rating, 100);
@@ -280,7 +280,7 @@ namespace Alamut.Data.EF.Test
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
             DbHelper.CleanBlog(_dbContext);
-            var expected = DbHelper.Seed_SingleBlog(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
             var fieldset = new Dictionary<string, object>
             {
                 {"Rating", 100},
@@ -298,7 +298,73 @@ namespace Alamut.Data.EF.Test
             Assert.True(entry.State == EntityState.Modified);
             Assert.Equal(100, actual.Rating);
             Assert.Equal("test", actual.Url);
+        }
 
+        [Fact]
+        public void Repository_DeleteById_EntityDeleted()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
+
+            // act
+            repository.DeleteById(expected.Id);
+
+            var entry = _dbContext.Entry(expected);
+
+            // assert
+            Assert.True(entry.State == EntityState.Deleted);
+            //Assert.DoesNotContain(expected, _dbContext.Blogs);
+        }
+
+        [Fact]
+        public async void Repository_DeleteByIdAndCommit_EntityDeletedInDatabase()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
+
+            // act
+            repository.DeleteById(expected.Id);
+            var result = await repository.CommitAsync(CancellationToken.None);
+
+            // assert
+            Assert.DoesNotContain(expected, _dbContext.Blogs);
+            Assert.True(result.Succeed);
+        }
+
+        [Fact]
+        public async void Repository_DeleteUnAttachedEntity_EntityDeletedInDatabase()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            var expected = DbHelper.SeedSingleBlog(_dbContext);
+            _dbContext.Entry(expected).State = EntityState.Detached;
+
+            // act
+            repository.Delete(new Blog() {Id = expected.Id});
+            var result = await repository.CommitAsync(CancellationToken.None);
+
+            // assert
+            Assert.DoesNotContain(expected, _dbContext.Blogs);
+            Assert.True(result.Succeed);
+        }
+
+        [Fact]
+        public async void Repository_DeleteManyEntities_EntitiesDeletedInDatabase()
+        {
+            // arrange
+            var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
+            var entities = DbHelper.SeedBulkBlogs(_dbContext);
+
+            // act
+            repository.DeleteMany(d => true);
+            var result = await repository.CommitAsync(CancellationToken.None);
+
+            // assert
+            Assert.Empty(_dbContext.Blogs);
+            Assert.True(result.Succeed);
         }
     }
 }

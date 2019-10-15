@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Alamut.Data.EF
 {
+    /// <inheritdoc />
     public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>, new()
     {
@@ -104,6 +105,16 @@ namespace Alamut.Data.EF
                              $"there is no item in {typeof(TEntity).Name} with id : {id}");
 
             DbSet.Remove(entity);
+        }
+
+        public void Delete(TEntity entity)
+        {
+            var entry = _dbContext.Entry(entity);
+
+            if (entry.State == EntityState.Detached)
+            { DbSet.Attach(entity); }
+
+            entry.State = EntityState.Deleted;
         }
 
         public virtual void DeleteMany(Expression<Func<TEntity, bool>> predicate)

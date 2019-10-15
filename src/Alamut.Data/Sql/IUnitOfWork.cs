@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Alamut.Abstractions.Structure;
 
 namespace Alamut.Data.Sql
 {
@@ -9,9 +10,8 @@ namespace Alamut.Data.Sql
     /// </summary>
     public interface IUnitOfWork : IDisposable
     {
-        void Commit();
-        Task CommitAsync(CancellationToken cancellationToken = default);
-        void RollBack();
-        Task RollBackAsync(CancellationToken cancellationToken = default);
+        Result Commit();
+        Task<Result> CommitAsync(CancellationToken cancellationToken = default);
+        void RejectChanges();
     }
 }
