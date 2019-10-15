@@ -19,6 +19,7 @@
         /// </remarks>
         int PageSize { get; set; }
 
+        // ReSharper disable once InvalidXmlDocComment
         /// <summary>
         /// Gets or sets the sort descriptions.
         /// </summary>

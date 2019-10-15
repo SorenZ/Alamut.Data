@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Alamut.Data.Entity;
+using Alamut.Data.Paging;
 
 namespace Alamut.Data.Repository
 {
@@ -60,19 +61,27 @@ namespace Alamut.Data.Repository
         Task<List<TDto>> GetByIds<TDto>(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// gets a list of requested DTO in Paginated data-type filtered by provided criteria or default 
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IPaginated<TDto>> GetPaginated<TDto>(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// maps the provided DTO to the Entity and add it to the current context 
         /// </summary>
         /// <typeparam name="TDto"></typeparam>
         /// <param name="dto"></param>
         /// <returns></returns>
-        Task Add<TDto>(TDto dto);
+        TEntity Add<TDto>(TDto dto);
 
 
         /// <summary>
         /// maps the provided DTO to the Entity and update it to the current context 
         /// </summary>
         /// <param name="dto"></param>
-        void Update<TDto>(TDto dto);
+        TEntity Update<TDto>(TDto dto);
 
         // ReSharper disable once InvalidXmlDocComment
         /// <summary>
