@@ -2,9 +2,6 @@
 
 namespace Alamut.Data.Repository
 {
-    public interface ISmartRepository<TEntity> : IRepository<TEntity>
-        where TEntity : IEntity
-    {
-
-    }
+    public interface ISmartRepository<TEntity> : ISmartRepository<TEntity, int> where TEntity : IEntity
+    { }
 }

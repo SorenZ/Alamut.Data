@@ -22,7 +22,7 @@ namespace Alamut.Data.EF.Test.Database
         {
             Blog entity = new Blog
             {
-                Url = "https://github.com/SorenZ/Alamut.DotNet",
+                Url = "https://github.com/SorenZ/Alamut.AspNet",
                 Rating = 5
             };
 
@@ -39,7 +39,7 @@ namespace Alamut.Data.EF.Test.Database
             {
                 var entity = new Blog
                 {
-                    Url = "https://github.com/SorenZ/Alamut.DotNet",
+                    Url = "https://github.com/SorenZ/Alamut.Data",
                     Rating = 5
                 };
 
