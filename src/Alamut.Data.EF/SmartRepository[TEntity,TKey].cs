@@ -77,9 +77,13 @@ namespace Alamut.Data.EF
         }
 
         /// <inheritdoc />
-        public TEntity Update<TDto>(TDto dto)
+        public async Task<TEntity> Update<TDto>(TKey id, TDto dto, CancellationToken cancellationToken = default)
         {
-            var entity = _mapper.Map<TEntity>(dto);
+            var entity = (await base.GetById(id, cancellationToken)) 
+                         ?? throw new KeyNotFoundException(
+                             $"there is no item in {typeof(TEntity).Name} with id : {id}");;
+
+            var updatedEntity = _mapper.Map(dto, entity);
             base.Update(entity);
             return entity;
         }

@@ -168,7 +168,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public void Repository_UpdateEntity_EntityUpdated()
+        public async void Repository_UpdateEntity_EntityUpdated()
         {
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
@@ -183,11 +183,12 @@ namespace Alamut.Data.EF.Test
             };
             
             // act
-            var updatedEntity = repository.Update(expected);
+            var updatedEntity = await repository.Update(entity.Id, expected);
             var entry = _dbContext.Entry(updatedEntity);
 
             // assert
             Assert.True(entry.State == EntityState.Modified);
+            Assert.Equal(entity.Url, updatedEntity.Url);
             Assert.Contains(updatedEntity, _dbContext.Blogs);
         }
     }

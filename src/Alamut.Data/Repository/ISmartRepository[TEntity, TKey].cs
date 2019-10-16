@@ -80,9 +80,11 @@ namespace Alamut.Data.Repository
         /// <summary>
         /// maps the provided DTO to the Entity and update it to the current context 
         /// </summary>
+        /// <param name="id">the key</param>
         /// <param name="dto"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns>generated Entity based on provided DTO</returns>
-        TEntity Update<TDto>(TDto dto);
+        Task<TEntity> Update<TDto>(TKey id,TDto dto, CancellationToken cancellationToken = default);
 
         // ReSharper disable once InvalidXmlDocComment
         /// <summary>
