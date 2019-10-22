@@ -50,7 +50,7 @@ namespace Alamut.Data.EF.Sample.Controllers
         public async Task<ActionResult<Result>> Put(int id, [FromBody] BlogDto value)
         {
             value.Id = id;
-            _blogRepository.Update(value);
+            _blogRepository.Update<BlogDto>(value);
 
             var result = await _blogRepository.CommitAsync(CancellationToken.None);
 
