@@ -1,2 +1,2 @@
 # Alamut.Data
-Lightweight low-ceremony implementation of Repository pattern with Auto-Mapper projector
+Lightweight implementation of Repository pattern with the help of auto-mapper
