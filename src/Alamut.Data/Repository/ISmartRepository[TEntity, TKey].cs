@@ -14,7 +14,7 @@ namespace Alamut.Data.Repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public interface ISmartRepository<TEntity, in TKey> : IRepository<TEntity, TKey> 
+    public interface ISmartRepository<TEntity, in TKey> : ISmartRepository<TEntity> 
         where TEntity : class, IEntity<TKey>
     {
         /// <summary>
@@ -84,7 +84,7 @@ namespace Alamut.Data.Repository
         /// <param name="dto"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>generated Entity based on provided DTO</returns>
-        Task<TEntity> Update<TDto>(TKey id,TDto dto, CancellationToken cancellationToken = default);
+        Task<TEntity> UpdateById<TDto>(TKey id,TDto dto, CancellationToken cancellationToken = default);
 
         // ReSharper disable once InvalidXmlDocComment
         /// <summary>

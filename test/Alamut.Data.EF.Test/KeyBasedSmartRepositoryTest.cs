@@ -9,12 +9,12 @@ using Xunit;
 
 namespace Alamut.Data.EF.Test
 {
-    public class SmartRepositoryTest
+    public class KeyBasedSmartRepositoryTest
     {
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public SmartRepositoryTest()
+        public KeyBasedSmartRepositoryTest()
         {
             _dbContext = DbHelper.GetInMemoryInstance();
 
@@ -49,6 +49,7 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            DbHelper.CleanBlog(_dbContext);
             var entity = DbHelper.SeedSingleBlog(_dbContext);
             var expected = _mapper.Map<BlogDto>(entity);
 
@@ -183,7 +184,7 @@ namespace Alamut.Data.EF.Test
             };
             
             // act
-            var updatedEntity = await repository.Update(entity.Id, expected);
+            var updatedEntity = await repository.UpdateById(entity.Id, expected);
             var entry = _dbContext.Entry(updatedEntity);
 
             // assert

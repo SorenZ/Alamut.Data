@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
+
 using Alamut.Data.EF.Test.Database;
+
 using Microsoft.EntityFrameworkCore;
+
 using Xunit;
 
 namespace Alamut.Data.EF.Test

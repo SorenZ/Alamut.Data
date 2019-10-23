@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Alamut.Data.Entity;
 using Alamut.Data.Paging;
 using Alamut.Data.Repository;
 using AutoMapper;
@@ -16,45 +15,45 @@ namespace Alamut.Data.EF
     public class SmartRepository<TEntity> : Repository<TEntity>,
         ISmartRepository<TEntity> where TEntity : class
     {
-        private readonly IMapper _mapper;
+        protected readonly IMapper Mapper;
 
         /// <inheritdoc />
         public SmartRepository(DbContext dbContext, IMapper mapper) : base(dbContext)
         {
-            _mapper = mapper;
+            Mapper = mapper;
         }
 
         /// <inheritdoc />
         public async Task<TDto> Get<TDto>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)=> 
             await Queryable
                 .Where(predicate)
-                .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(cancellationToken);
 
         /// <inheritdoc />
         public async Task<List<TDto>> GetAll<TDto>(CancellationToken cancellationToken = default) =>
             await Queryable
-                .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
         /// <inheritdoc />
         public async Task<List<TDto>> GetMany<TDto>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) =>
             await Queryable
                 .Where(predicate)
-                .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
         /// <inheritdoc />
         public async Task<IPaginated<TDto>> GetPaginated<TDto>(IPaginatedCriteria criteria = null, 
             CancellationToken cancellationToken = default)=>
             await Queryable
-                .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
                 .ToPaginatedAsync(criteria ?? new PaginatedCriteria(), cancellationToken);
 
         /// <inheritdoc />
         public TEntity Add<TDto>(TDto dto)
         {
-            var entity = _mapper.Map<TEntity>(dto);
+            var entity = Mapper.Map<TEntity>(dto);
             base.Add(entity);
             return entity;
         }
@@ -66,11 +65,11 @@ namespace Alamut.Data.EF
         /// <inheritdoc />
         public async Task<TEntity> UpdateById<TDto>(object[] ids, TDto dto, CancellationToken cancellationToken = default)
         {
-            var entity = (await base.DbSet.FindAsync(ids, cancellationToken: cancellationToken)) 
+            var entity = (await DbSet.FindAsync(ids, cancellationToken: cancellationToken)) 
                          ?? throw new KeyNotFoundException(
                              $"there is no item in {typeof(TEntity).Name} with id : {ids}");;
 
-            var updatedEntity = _mapper.Map(dto, entity);
+            var updatedEntity = Mapper.Map(dto, entity);
             base.Update(entity);
             return entity;
         }

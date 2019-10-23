@@ -1,12 +1,16 @@
-﻿using System;
+﻿// ReSharper disable RedundantArgumentDefaultValue
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+
 using Alamut.Data.EF.Test.Database;
 using Alamut.Data.Paging;
+
 using Microsoft.EntityFrameworkCore;
+
 using Xunit;
+
 
 namespace Alamut.Data.EF.Test
 {
@@ -251,7 +255,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public async void Repository_UpdateField_EntityUpdated()
+        public async Task Repository_UpdateField_EntityUpdated()
         {
             // arrange
             var repository = new Repository<Blog>(_dbContext);
@@ -350,7 +354,7 @@ namespace Alamut.Data.EF.Test
             // arrange
             var repository = new Repository<Blog>(_dbContext);
             DbHelper.CleanBlog(_dbContext);
-            var entities = DbHelper.SeedBulkBlogs(_dbContext);
+            DbHelper.SeedBulkBlogs(_dbContext);
 
             // act
             repository.DeleteMany(d => true);
