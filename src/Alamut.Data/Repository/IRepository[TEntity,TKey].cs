@@ -16,14 +16,9 @@ namespace Alamut.Data.Repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public interface IRepository<TEntity, in TKey> where TEntity : IEntity<TKey>
+    public interface IRepository<TEntity, in TKey> : IRepository<TEntity>
+        where TEntity : class, IEntity<TKey>
     {
-        /// <summary>
-        /// provides a queryable source of elements
-        /// the Queryable has not been tracked in sql repositories
-        /// </summary>
-        IQueryable<TEntity> Queryable { get; }
-
         /// <summary>
         /// gets an Entity by id 
         /// </summary>
@@ -41,32 +36,6 @@ namespace Alamut.Data.Repository
         Task<List<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// gets a list of Entities in Paginated data-type filtered by provided criteria or default 
-        /// </summary>
-        /// <param name="criteria"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<IPaginated<TEntity>> GetPaginated(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// adds an Entity to the current context
-        /// </summary>
-        /// <param name="entity"></param>
-        void Add(TEntity entity);
-
-        /// <summary>
-        /// adds a list of Entities to the current Context
-        /// </summary>
-        /// <param name="entities"></param>
-        void AddRange(IEnumerable<TEntity> entities);
-
-        /// <summary>
-        /// updates an Entity to the current Context
-        /// </summary>
-        /// <param name="entity"></param>
-        void Update(TEntity entity);
-
-        /// <summary>
         /// updates an item (one field) by expression member selector filter by id
         /// </summary>
         /// <typeparam name="TField"></typeparam>
@@ -76,22 +45,8 @@ namespace Alamut.Data.Repository
         /// <remarks>
         /// Even if multiple documents match the filter, only one will be updated because we used UpdateOne
         /// </remarks>
-        void UpdateFieldById<TField>(TKey id,
+        Task UpdateFieldById<TField>(TKey id,
             Expression<Func<TEntity, TField>> memberExpression,
-            TField value);
-
-        /// <summary>
-        /// update an item (one field) by expression member selector filter by provided filterExpression predicate
-        /// </summary>
-        /// <typeparam name="TField"></typeparam>
-        /// <param name="filterExpression"></param>
-        /// <param name="memberExpression"></param>
-        /// <param name="value"></param>
-        /// <remarks>
-        /// Even if multiple documents match the filter, only one will be updated because we used UpdateOne
-        /// </remarks>
-        void UpdateField<TField>(Expression<Func<TEntity, bool>> filterExpression, 
-            Expression<Func<TEntity, TField>> memberExpression, 
             TField value);
 
         /// <summary>
@@ -107,25 +62,5 @@ namespace Alamut.Data.Repository
         /// </summary>
         /// <param name="id">the key</param>
         void DeleteById(TKey id);
-
-        /// <summary>
-        /// deletes an Entity by changing the state of it
-        /// </summary>
-        /// <param name="entity"></param>
-        void Delete(TEntity entity);
-
-        /// <summary>
-        /// deletes multiple Entities filter by predicate (in current Context)
-        /// </summary>
-        /// <param name="predicate">represent expression to filter delete</param>
-        void DeleteMany(Expression<Func<TEntity, bool>> predicate);
-
-        /// <summary>
-        /// commit changes to underlying database
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns>if commit changes the state of the database return success Result, otherwise return error Result</returns>
-        Task<Result> CommitAsync(CancellationToken cancellationToken);
-
     }
 }

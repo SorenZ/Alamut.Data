@@ -251,7 +251,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public void Repository_UpdateField_EntityUpdated()
+        public async void Repository_UpdateField_EntityUpdated()
         {
             // arrange
             var repository = new Repository<Blog>(_dbContext);
@@ -259,7 +259,7 @@ namespace Alamut.Data.EF.Test
             var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
-            repository.UpdateField(blog => blog.Id == expected.Id, blog => blog.Rating, 100);
+            await repository.UpdateField(blog => blog.Id == expected.Id, blog => blog.Rating, 100);
             
             var entry = _dbContext.Entry(expected);
 

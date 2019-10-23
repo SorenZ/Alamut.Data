@@ -15,7 +15,7 @@ namespace Alamut.Data.Repository
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     public interface ISmartRepository<TEntity, in TKey> : IRepository<TEntity, TKey> 
-        where TEntity : IEntity<TKey>
+        where TEntity : class, IEntity<TKey>
     {
         /// <summary>
         /// gets an item (mapped to provided TDto) by id

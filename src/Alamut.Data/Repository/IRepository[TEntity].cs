@@ -85,7 +85,7 @@ namespace Alamut.Data.Repository
         /// <remarks>
         /// Even if multiple documents match the filter, only one will be updated because we used UpdateOne
         /// </remarks>
-        void UpdateField<TField>(Expression<Func<TEntity, bool>> filterExpression, 
+        Task UpdateField<TField>(Expression<Func<TEntity, bool>> filterExpression, 
             Expression<Func<TEntity, TField>> memberExpression, 
             TField value);
 

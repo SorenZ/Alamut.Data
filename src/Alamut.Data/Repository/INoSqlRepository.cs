@@ -6,7 +6,7 @@ using Alamut.Data.Entity;
 
 namespace Alamut.Data.Repository
 {
-    public interface INoSqlRepository<TEntity, in TKey> : IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
+    public interface INoSqlRepository<TEntity, in TKey> : IRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         /// <summary>
         /// add an item to a list (if not exist)

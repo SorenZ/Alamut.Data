@@ -239,7 +239,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public void Repository_UpdateFieldById_EntityUpdated()
+        public async void Repository_UpdateFieldById_EntityUpdated()
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
@@ -247,7 +247,7 @@ namespace Alamut.Data.EF.Test
             var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
-            repository.UpdateFieldById(expected.Id, blog => blog.Rating, 100);
+            await repository.UpdateFieldById(expected.Id, blog => blog.Rating, 100);
             
             var entry = _dbContext.Entry(expected);
 
@@ -257,7 +257,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public void Repository_UpdateField_EntityUpdated()
+        public async void Repository_UpdateField_EntityUpdated()
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
@@ -265,7 +265,7 @@ namespace Alamut.Data.EF.Test
             var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
-            repository.UpdateField(blog => blog.Id == expected.Id, blog => blog.Rating, 100);
+            await repository.UpdateField(blog => blog.Id == expected.Id, blog => blog.Rating, 100);
             
             var entry = _dbContext.Entry(expected);
 
@@ -356,7 +356,7 @@ namespace Alamut.Data.EF.Test
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
             DbHelper.CleanBlog(_dbContext);
-            var entities = DbHelper.SeedBulkBlogs(_dbContext);
+            DbHelper.SeedBulkBlogs(_dbContext);
 
             // act
             repository.DeleteMany(d => true);

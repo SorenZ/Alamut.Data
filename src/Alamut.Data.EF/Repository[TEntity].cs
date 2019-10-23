@@ -77,11 +77,11 @@ namespace Alamut.Data.EF
         }
 
         /// <inheritdoc />
-        public virtual void UpdateField<TField>(Expression<Func<TEntity, bool>> filterExpression,
+        public virtual async Task UpdateField<TField>(Expression<Func<TEntity, bool>> filterExpression,
             Expression<Func<TEntity, TField>> memberExpression,
             TField value)
         {
-            var entity = DbSet.FirstOrDefault(filterExpression)
+            var entity = (await DbSet.FirstOrDefaultAsync(filterExpression))
                          ?? throw new KeyNotFoundException(
                              $"there is no item in {typeof(TEntity).Name} with query : {filterExpression}");
 
