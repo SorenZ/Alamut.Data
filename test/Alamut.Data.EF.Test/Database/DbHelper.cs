@@ -18,6 +18,20 @@ namespace Alamut.Data.EF.Test.Database
             return context;
         }
 
+        public static Story SeedSingleStory(AppDbContext context)
+        {
+            var entity = new Story
+            {
+                Title = "the first story"
+            };
+
+            context.Stories.Add(entity);
+
+            context.SaveChanges();
+
+            return entity;
+        }
+
         public static Blog SeedSingleBlog(AppDbContext context)
         {
             Blog entity = new Blog

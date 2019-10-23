@@ -11,11 +11,11 @@ using Xunit;
 
 namespace Alamut.Data.EF.Test
 {
-    public class RepositoryTest
+    public class KeyBasedRepositoryTest
     {
         private readonly AppDbContext _dbContext;
 
-        public RepositoryTest()
+        public KeyBasedRepositoryTest()
         {
             _dbContext = DbHelper.GetInMemoryInstance();
         }

@@ -29,9 +29,9 @@ namespace Alamut.Data.EF.Sample.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogDto>> Get(int id)
+        public async Task<Blog> Get(int id)
         {
-            return await _blogRepository.GetById<BlogDto>(id);
+            return await _blogRepository.GetById(id);
         }
 
         // POST api/values
@@ -50,7 +50,7 @@ namespace Alamut.Data.EF.Sample.Controllers
         public async Task<ActionResult<Result>> Put(int id, [FromBody] BlogDto value)
         {
             value.Id = id;
-            _blogRepository.Update<BlogDto>(value);
+            await _blogRepository.UpdateById(id, value);
 
             var result = await _blogRepository.CommitAsync(CancellationToken.None);
 
@@ -62,7 +62,7 @@ namespace Alamut.Data.EF.Sample.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Result>> Delete(int id)
         {
-            _blogRepository.DeleteById(id);
+            await _blogRepository.DeleteById(id);
             var result = await _blogRepository.CommitAsync(CancellationToken.None);
 
             return result ? Ok(result) : StatusCode(result.StatusCode, result);

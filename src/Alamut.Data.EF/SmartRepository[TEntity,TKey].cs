@@ -63,7 +63,8 @@ namespace Alamut.Data.EF
                 .ToListAsync(cancellationToken);
 
         /// <inheritdoc />
-        public async Task<IPaginated<TDto>> GetPaginated<TDto>(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default) =>
+        public async Task<IPaginated<TDto>> GetPaginated<TDto>(IPaginatedCriteria criteria = null, 
+            CancellationToken cancellationToken = default) =>
             await Queryable
                 .ProjectTo<TDto>(_mapper.ConfigurationProvider)
                 .ToPaginatedAsync(criteria ?? new PaginatedCriteria(), cancellationToken);

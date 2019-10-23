@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Alamut.Abstractions.Structure;
 using Alamut.Data.Paging;
 using Alamut.Data.Repository;
 using Alamut.Helpers.Linq;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Alamut.Data.EF
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private readonly DbContext _dbContext;
+        protected readonly DbContext DbContext;
 
         public Repository(DbContext dbContext)
         {
-            _dbContext = dbContext;
+            DbContext = dbContext;
             DbSet = dbContext.Set<TEntity>();
         }
 
@@ -29,8 +30,8 @@ namespace Alamut.Data.EF
         public virtual IQueryable<TEntity> Queryable => DbSet;
 
         /// <inheritdoc />
-        public virtual async Task<TEntity> GetById(object id, CancellationToken cancellationToken = default) =>
-            await DbSet.FindAsync(id, cancellationToken);
+        public virtual async Task<TEntity> GetById(params object[] id) =>
+            await DbSet.FindAsync(id);
 
         /// <inheritdoc />
         public virtual async Task<IPaginated<TEntity>> GetPaginated(IPaginatedCriteria criteria = null,
@@ -46,7 +47,7 @@ namespace Alamut.Data.EF
         /// <inheritdoc />
         public virtual void Update(TEntity entity)
         {
-            var entry = _dbContext.Entry(entity);
+            var entry = DbContext.Entry(entity);
 
             if (entry.State == EntityState.Detached)
             { DbSet.Attach(entity); }
@@ -55,12 +56,18 @@ namespace Alamut.Data.EF
         }
 
         /// <inheritdoc />
-        public virtual void UpdateFieldById<TField>(object id,
+        public virtual async Task UpdateFieldById<TField>(object id,
             Expression<Func<TEntity, TField>> memberExpression, TField value)
         {
-            var entity = DbSet.Find(id)
+            await UpdateFieldById(new[] {id}, memberExpression, value);
+        }
+
+        public virtual async Task UpdateFieldById<TField>(object[] ids,
+            Expression<Func<TEntity, TField>> memberExpression, TField value)
+        {
+            var entity = await DbSet.FindAsync(ids)
                          ?? throw new KeyNotFoundException(
-                             $"there is no item in {typeof(TEntity).Name} with id : {id}");
+                             $"there is no item in {typeof(TEntity).Name} with id : {ids}");
 
             var memberName = LambdaExpressions.GetName(memberExpression);
 
@@ -85,11 +92,15 @@ namespace Alamut.Data.EF
         }
 
         /// <inheritdoc />
-        public virtual void GenericUpdate(object id, Dictionary<string, object> fieldset)
+        public async Task GenericUpdate(object id, Dictionary<string, object> fieldset) => 
+            await GenericUpdate(new[] {id}, fieldset);
+
+        /// <inheritdoc />
+        public virtual async Task GenericUpdate(object[] ids, Dictionary<string, object> fieldset)
         {
-            var entity = DbSet.Find(id)
+            var entity = await DbSet.FindAsync(ids)
                          ?? throw new KeyNotFoundException(
-                             $"there is no item in {typeof(TEntity).Name} with id : {id}");
+                             $"there is no item in {typeof(TEntity).Name} with id : {ids}");
 
             foreach (var field in fieldset)
             {
@@ -99,10 +110,12 @@ namespace Alamut.Data.EF
             }
         }
 
+
+
         /// <inheritdoc />
-        public virtual void DeleteById(object id)
+        public virtual async Task DeleteById(params object[] id)
         {
-            var entity = DbSet.Find(id)
+            var entity = await DbSet.FindAsync(id)
                          ?? throw new KeyNotFoundException(
                              $"there is no item in {typeof(TEntity).Name} with id : {id}");
 
@@ -112,7 +125,7 @@ namespace Alamut.Data.EF
         /// <inheritdoc />
         public void Delete(TEntity entity)
         {
-            var entry = _dbContext.Entry(entity);
+            var entry = DbContext.Entry(entity);
 
             if (entry.State == EntityState.Detached)
             { DbSet.Attach(entity); }
@@ -129,6 +142,6 @@ namespace Alamut.Data.EF
 
         /// <inheritdoc />
         public virtual Task<Result> CommitAsync(CancellationToken cancellationToken) => 
-            _dbContext.SaveChangeAndReturnResult(cancellationToken);
+            DbContext.SaveChangeAndReturnResult(cancellationToken);
     }
 }
