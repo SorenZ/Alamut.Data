@@ -41,7 +41,7 @@ namespace Alamut.Data.EF.Sample
         public static void RegisterRepository(this IServiceCollection services)
         {
             services.AddScoped(typeof(ISmartRepository<,>), typeof(SmartRepository<,>));
-            services.AddScoped(typeof(ISmartRepository<>), typeof(SmartRepository<>));
+            services.AddScoped(typeof(Alamut.Data.Repository.ISmartRepository<>), typeof(Alamut.Data.EF.SmartRepository<>));
         }
     }
 }
