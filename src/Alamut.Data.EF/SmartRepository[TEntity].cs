@@ -67,11 +67,11 @@ namespace Alamut.Data.EF
         {
             var entity = (await DbSet.FindAsync(ids, cancellationToken: cancellationToken)) 
                          ?? throw new KeyNotFoundException(
-                             $"there is no item in {typeof(TEntity).Name} with id : {ids}");;
+                             $"there is no item in {typeof(TEntity).Name} with id : {ids}");
 
             var updatedEntity = Mapper.Map(dto, entity);
             base.Update(entity);
-            return entity;
+            return updatedEntity;
         }
     }
 }
