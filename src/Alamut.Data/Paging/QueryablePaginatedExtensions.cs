@@ -18,9 +18,6 @@ namespace Alamut.Data.Paging
         /// <returns> </returns>
         public static IQueryable<T> ToPage<T>(this IQueryable<T> query, int startIndex, int itemCount)
         {
-            if (query == null)
-                throw new ArgumentNullException(nameof(query));
-
             if (startIndex < 0)
                 startIndex = 0;
 
@@ -57,11 +54,16 @@ namespace Alamut.Data.Paging
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task<IPaginated<T>> ToPaginatedAsync<T>(this IQueryable<T> query, 
-        IPaginatedCriteria paginatedCriteria, CancellationToken cancellationToken = default)
+            IPaginatedCriteria paginatedCriteria, CancellationToken cancellationToken = default)
         {
+            var dataTask = query.ToPage(paginatedCriteria).ToListAsync(cancellationToken);
+            var countTask = query.CountAsync(cancellationToken);
+
+            await Task.WhenAll(dataTask, countTask);
+
             return new Paginated<T>(
-                await query.ToPage(paginatedCriteria.StartIndex, paginatedCriteria.PageSize).ToListAsync(cancellationToken),
-                await query.CountAsync(cancellationToken),
+                dataTask.Result,
+                countTask.Result,
                 paginatedCriteria.CurrentPage,
                 paginatedCriteria.PageSize);
         }
