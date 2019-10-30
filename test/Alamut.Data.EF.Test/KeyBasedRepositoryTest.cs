@@ -81,6 +81,7 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
             var entity1 = DbHelper.SeedSingleBlog(_dbContext);
             var entity2 = DbHelper.SeedSingleBlog(_dbContext);
             var ids = new[] {entity1.Id, entity2.Id};
@@ -322,6 +323,7 @@ namespace Alamut.Data.EF.Test
         {
             // arrange
             var repository = new Repository<Blog,int>(_dbContext);
+            DbHelper.CleanBlog(_dbContext);
             var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act

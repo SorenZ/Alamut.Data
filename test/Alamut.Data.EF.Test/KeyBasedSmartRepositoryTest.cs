@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Alamut.Data.EF.Test.Database;
 using Alamut.Data.EF.Test.Models;
 using Alamut.Data.Paging;
@@ -30,7 +31,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public async void SmartRepository_GetById_ReturnDTO()
+        public async Task SmartRepository_GetById_ReturnDTO()
         {
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
@@ -45,7 +46,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public async void SmartRepository_Get_ReturnDTO()
+        public async Task SmartRepository_Get_ReturnDTO()
         {
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
@@ -61,7 +62,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public async void SmartRepository_GetAll_ReturnDTOs()
+        public async Task SmartRepository_GetAll_ReturnDTOs()
         {
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
@@ -77,7 +78,7 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public async void SmartRepository_GetMany_ReturnDTOs()
+        public async Task SmartRepository_GetMany_ReturnDTOs()
         {
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
@@ -132,11 +133,10 @@ namespace Alamut.Data.EF.Test
         }
 
         [Fact]
-        public async void Repository_GetPaginatedWithCustomizedCriteria_ReturnExpectedPaginated()
+        public async Task Repository_GetPaginatedWithCustomizedCriteria_ReturnExpectedPaginated()
         {
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
-            DbHelper.CleanBlog(_dbContext);
             DbHelper.CleanBlog(_dbContext);
             var blogs = DbHelper.SeedBulkBlogs(_dbContext);
             var dtoList = _mapper.Map<List<BlogDto>>(blogs);
