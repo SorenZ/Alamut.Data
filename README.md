@@ -18,7 +18,7 @@ Or via the .NET Core command line interface:
 Either commands, from Package Manager Console or .NET Core CLI, will download and install all required dependencies.
 
 **Table of Content:** 
-* Paging
+* [Paging](https://github.com/SorenZ/Alamut.Data/wiki/Paging)
 * Repository
 * SmartRepository
 * UnitOfWork
