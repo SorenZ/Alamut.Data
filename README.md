@@ -19,6 +19,6 @@ Either commands, from Package Manager Console or .NET Core CLI, will download an
 
 **Table of Content:** 
 * [Paging](https://github.com/SorenZ/Alamut.Data/wiki/Paging)
-* Repository
+* [Repository](https://github.com/SorenZ/Alamut.Data/wiki/Repository)
 * SmartRepository
 * UnitOfWork
