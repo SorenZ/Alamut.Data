@@ -46,7 +46,7 @@ namespace Alamut.Data.Repository
         void AddRange(IEnumerable<TEntity> entities);
 
         /// <summary>
-        /// updates an Entity to the current Context
+        /// updates an Entity in the current Context
         /// </summary>
         /// <param name="entity"></param>
         void Update(TEntity entity);
@@ -76,7 +76,7 @@ namespace Alamut.Data.Repository
             Expression<Func<TEntity, TField>> memberExpression, TField value);
 
         /// <summary>
-        /// update an item (one field) by expression member selector filter by provided filterExpression predicate
+        /// updates an item (one field) by expression member selector filter by provided filterExpression predicate
         /// </summary>
         /// <typeparam name="TField"></typeparam>
         /// <param name="filterExpression"></param>
@@ -90,11 +90,10 @@ namespace Alamut.Data.Repository
             TField value);
 
         /// <summary>
-        /// update fieldset (filed, value) in the database filter by id
+        /// updates fieldset (filed, value) in the database filter by id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="fieldset"></param>
-        /// <remarks>address no-sql data provider</remarks>
         Task GenericUpdate(object id, Dictionary<string, object> fieldset);
 
         /// <summary>
