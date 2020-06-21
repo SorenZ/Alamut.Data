@@ -27,7 +27,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Alamut.Data\Alamut.Data.csproj" />
+    <PackageReference Include="Alamut.Data" Version="4.1.0" />
   </ItemGroup>
   
   <ItemGroup>
