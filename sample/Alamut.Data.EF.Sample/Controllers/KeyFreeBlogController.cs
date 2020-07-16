@@ -31,7 +31,9 @@ namespace Alamut.Data.EF.Sample.Controllers
 
             return await _blogRepository.GetPaginated(new DynamicPaginatedCriteria
             {
-                Sorts = "Id desc"
+                Sorts = "Id desc",
+                FilterClause = "Id == @0",
+                FilterParameters = new object[] {1}
             });
         }
 

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Alamut.Data.EF\Alamut.Data.EF.csproj" />
+    <ProjectReference Include="..\..\src\Alamut.Data\Alamut.Data.csproj" />
   </ItemGroup>
 
 </Project>
