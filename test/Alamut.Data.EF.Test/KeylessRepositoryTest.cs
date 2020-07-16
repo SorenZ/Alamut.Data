@@ -60,7 +60,7 @@ namespace Alamut.Data.EF.Test
             var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
-            var actual = await repository.GetById(expected.Id);
+            var actual = await repository.FindById(expected.Id);
 
             // assert
             Assert.Equal(expected, actual);
@@ -74,7 +74,7 @@ namespace Alamut.Data.EF.Test
             var expected = DbHelper.SeedSingleStory(_dbContext);
 
             // act
-            var actual = await repository.GetById(expected.Id, expected.Key);
+            var actual = await repository.FindById(expected.Id, expected.Key);
 
             // assert
             Assert.Equal(expected, actual);
@@ -88,7 +88,7 @@ namespace Alamut.Data.EF.Test
             DbHelper.SeedSingleBlog(_dbContext);
 
             // act
-            var actual = await repository.GetById(0);
+            var actual = await repository.FindById(0);
 
             // assert
             Assert.Null(actual);
@@ -290,7 +290,7 @@ namespace Alamut.Data.EF.Test
             await repository.GenericUpdate(expected.Id, fieldset);
             
             var entry = _dbContext.Entry(expected);
-            var actual = await repository.GetById(expected.Id);
+            var actual = await repository.FindById(expected.Id);
 
             // assert
             Assert.True(entry.State == EntityState.Modified);

@@ -20,8 +20,8 @@ namespace Alamut.Data.Test
         {
             // arrange
             DbHelper.CleanBlog(_dbContext);
-            var blogs = DbHelper.SeedBulkBlogs(_dbContext);
-            var expected = new Paginated<Blog>(blogs.Skip(10).Take(10).ToList(), blogs.Count, 2, 10);
+            var blogList = DbHelper.SeedBulkBlogs(_dbContext);
+            var expected = new Paginated<Blog>(blogList.Skip(10).Take(10).ToList(), blogList.Count, 2, 10);
 
             // act
             var actual = await _dbContext.Blogs.ToPaginatedAsync(new PaginatedCriteria(2, 10));

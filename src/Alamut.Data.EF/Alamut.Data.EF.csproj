@@ -5,7 +5,7 @@
     <LangVersion>7.3</LangVersion>
     
     <PackageId>Alamut.Data.EF</PackageId>
-    <Version>4.1.0</Version>
+    <Version>4.1.1</Version>
     <Authors>Hamed ZVand</Authors>
     <Description>provides repository pattern for relational databases based on Entity Framework Core</Description>
     
@@ -27,11 +27,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Alamut.Data" Version="4.1.0" />
+    <ProjectReference Include="..\Alamut.Data\Alamut.Data.csproj" />
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="images\icon.png" Pack="true" PackagePath="\"/>
+    <None Include="images\icon.png"/>
   </ItemGroup>
 
 </Project>

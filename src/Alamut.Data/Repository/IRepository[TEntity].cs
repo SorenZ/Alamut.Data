@@ -21,9 +21,9 @@ namespace Alamut.Data.Repository
         /// <summary>
         /// gets an Entity by id 
         /// </summary>
-        /// <param name="id">entity key</param>
+        /// <param name="ids">entity key(s)</param>
         /// <returns>an Entity or null</returns>
-        Task<TEntity> GetById(params object[] id);
+        Task<TEntity> FindById(params object[] ids);
 
         /// <summary>
         /// gets a list of Entities in Paginated data-type filtered by provided criteria or default 

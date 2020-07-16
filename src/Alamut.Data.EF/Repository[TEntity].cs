@@ -30,8 +30,8 @@ namespace Alamut.Data.EF
         public virtual IQueryable<TEntity> Queryable => DbSet;
 
         /// <inheritdoc />
-        public virtual async Task<TEntity> GetById(params object[] id) =>
-            await DbSet.FindAsync(id);
+        public virtual async Task<TEntity> FindById(params object[] ids) =>
+            await DbSet.FindAsync(ids);
 
         /// <inheritdoc />
         public virtual async Task<IPaginated<TEntity>> GetPaginated(IPaginatedCriteria criteria = null,
