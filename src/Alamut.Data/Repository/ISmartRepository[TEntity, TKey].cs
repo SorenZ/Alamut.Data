@@ -11,7 +11,8 @@ namespace Alamut.Data.Repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public interface ISmartRepository<TEntity, in TKey> : ISmartRepository<TEntity> 
+    public interface ISmartRepository<TEntity, in TKey> : IRepository<TEntity, TKey>,
+        ISmartRepository<TEntity> 
         where TEntity : class, IEntity<TKey>
     {
         /// <summary>

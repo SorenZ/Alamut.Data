@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Alamut.Abstractions.Structure;
@@ -11,11 +11,11 @@ namespace Alamut.Data.EF.Sample.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KeyFreeBlogController : ControllerBase
+    public class KeyBasedBlogController : ControllerBase
     {
-        private readonly ISmartRepository<Blog> _blogRepository;
+        private readonly ISmartRepository<Blog, int> _blogRepository;
 
-        public KeyFreeBlogController(ISmartRepository<Blog> blogRepository)
+        public KeyBasedBlogController(ISmartRepository<Blog, int> blogRepository)
         {
             _blogRepository = blogRepository;
         }
@@ -28,11 +28,18 @@ namespace Alamut.Data.EF.Sample.Controllers
             return Ok(result);
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<BlogDto> Get(int id)
+        //[HttpGet("{id}")]
+        //public async Task<BlogDto> Get(int id)
+        //{
+        //    var result = await _blogRepository.Get<BlogDto>(q => q.Id == id);
+
+        //    return result;
+        //}
+
+        [HttpGet("{ids}")]
+        public async Task<List<Blog>> Gets([FromQuery] IEnumerable<int> ids)
         {
-            var result = await _blogRepository.Get<BlogDto>(q => q.Id == id);
+            var result = await _blogRepository.GetByIds(ids);
 
             return result;
         }

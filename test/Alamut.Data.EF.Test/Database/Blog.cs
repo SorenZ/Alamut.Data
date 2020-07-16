@@ -3,7 +3,7 @@ using Alamut.Data.Entity;
 
 namespace Alamut.Data.EF.Test.Database
 {
-    public class Blog : IEntity
+    public class Blog : IEntity<int>
     {
         public int Id { get; set; }
         public string Url { get; set; }

@@ -55,9 +55,9 @@ namespace Alamut.Data.EF
             }
         }
 
-        public virtual void DeleteById(TKey id)
+        public virtual async Task DeleteById(TKey id, CancellationToken cancellationToken)
         {
-            var entity = DbSet.FirstOrDefault(q => q.Id.Equals(id))
+            var entity = (await DbSet.FirstOrDefaultAsync(q => q.Id.Equals(id), cancellationToken))
                          ?? throw new KeyNotFoundException(
                              $"there is no item in {typeof(TEntity).Name} with id : {id}");
 

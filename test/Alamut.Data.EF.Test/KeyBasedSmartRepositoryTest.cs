@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Alamut.Data.EF.Test.Database;
 using Alamut.Data.EF.Test.Models;
 using Alamut.Data.Paging;
+using Alamut.Data.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -14,6 +15,7 @@ namespace Alamut.Data.EF.Test
     {
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IRepository<Blog, int> _internalRepository;
 
         public KeyBasedSmartRepositoryTest()
         {
@@ -28,13 +30,14 @@ namespace Alamut.Data.EF.Test
             configuration.AssertConfigurationIsValid();
 
             _mapper = configuration.CreateMapper();
+            _internalRepository = new Repository<Blog, int>(_dbContext);
         }
 
         [Fact]
         public async Task SmartRepository_GetById_ReturnDTO()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             var entity = DbHelper.SeedSingleBlog(_dbContext);
             var expected = _mapper.Map<BlogDto>(entity);
 
@@ -49,7 +52,7 @@ namespace Alamut.Data.EF.Test
         public async Task SmartRepository_Get_ReturnDTO()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var entity = DbHelper.SeedSingleBlog(_dbContext);
             var expected = _mapper.Map<BlogDto>(entity);
@@ -65,7 +68,7 @@ namespace Alamut.Data.EF.Test
         public async Task SmartRepository_GetAll_ReturnDTOs()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var entities = DbHelper.SeedBulkBlogs(_dbContext);
             var expected = _mapper.Map<List<BlogDto>>(entities);
@@ -81,7 +84,7 @@ namespace Alamut.Data.EF.Test
         public async Task SmartRepository_GetMany_ReturnDTOs()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var entities = DbHelper.SeedBulkBlogs(_dbContext);
             var expected = _mapper.Map<List<BlogDto>>(entities);
@@ -97,7 +100,7 @@ namespace Alamut.Data.EF.Test
         public async void SmartRepository_GetByIds_ReturnDTOs()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var entity1 = DbHelper.SeedSingleBlog(_dbContext);
             var entity2 = DbHelper.SeedSingleBlog(_dbContext);
@@ -119,7 +122,7 @@ namespace Alamut.Data.EF.Test
         public async void Repository_GetPaginatedWithDefaultCriteria_ReturnDefaultPaginated()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var blogs = DbHelper.SeedBulkBlogs(_dbContext);
             var dtoList = _mapper.Map<List<BlogDto>>(blogs);
@@ -136,7 +139,7 @@ namespace Alamut.Data.EF.Test
         public async Task Repository_GetPaginatedWithCustomizedCriteria_ReturnExpectedPaginated()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var blogs = DbHelper.SeedBulkBlogs(_dbContext);
             var dtoList = _mapper.Map<List<BlogDto>>(blogs);
@@ -153,7 +156,7 @@ namespace Alamut.Data.EF.Test
         public void Repository_AddDto_EntityAdded()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var expected = new BlogDto
             {
@@ -172,7 +175,7 @@ namespace Alamut.Data.EF.Test
         public async void Repository_UpdateEntity_EntityUpdated()
         {
             // arrange
-            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper);
+            var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var entity = DbHelper.SeedSingleBlog(_dbContext);
             _dbContext.Entry(entity).State = EntityState.Detached;

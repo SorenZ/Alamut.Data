@@ -58,6 +58,7 @@ namespace Alamut.Data.Repository
         /// deletes an Entity by id in the current Context
         /// </summary>
         /// <param name="id">the key</param>
-        void DeleteById(TKey id);
+        /// <param name="cancellationToken"></param>
+        Task DeleteById(TKey id, CancellationToken cancellationToken);
     }
 }

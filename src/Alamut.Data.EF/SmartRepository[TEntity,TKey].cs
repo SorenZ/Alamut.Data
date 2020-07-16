@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,9 +19,13 @@ namespace Alamut.Data.EF
         ISmartRepository<TEntity,TKey> where TEntity : class, IEntity<TKey>, new()
 
     {
+        private readonly IRepository<TEntity, TKey> _internalRepository;
+
         /// <inheritdoc />
-        public SmartRepository(DbContext dbContext, IMapper mapper) : base(dbContext,mapper)
-        { }
+        public SmartRepository(DbContext dbContext, IMapper mapper, IRepository<TEntity, TKey> internalRepository) : base(dbContext,mapper)
+        {
+            _internalRepository = internalRepository;
+        }
 
         /// <inheritdoc />
         public async Task<TDto> GetById<TDto>(TKey id, CancellationToken cancellationToken = default) =>
@@ -46,5 +52,20 @@ namespace Alamut.Data.EF
             base.Update(entity);
             return updatedEntity;
         }
+
+        public async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default) =>
+            await _internalRepository.GetById(id, cancellationToken);
+
+        public async Task<List<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default) => 
+            await _internalRepository.GetByIds(ids, cancellationToken);
+
+        public async Task UpdateFieldById<TField>(TKey id, Expression<Func<TEntity, TField>> memberExpression, TField value) => 
+            await _internalRepository.UpdateFieldById(id, memberExpression, value);
+
+        public void GenericUpdate(TKey id, Dictionary<string, object> fieldset) => 
+            _internalRepository.GenericUpdate(id, fieldset);
+
+        public async Task DeleteById(TKey id, CancellationToken cancellationToken) =>
+            await _internalRepository.DeleteById(id, cancellationToken);
     }
 }
