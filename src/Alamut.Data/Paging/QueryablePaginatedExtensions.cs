@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Alamut.Data.NoSql;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alamut.Data.Paging
@@ -56,7 +57,9 @@ namespace Alamut.Data.Paging
         public static async Task<IPaginated<T>> ToPaginatedAsync<T>(this IQueryable<T> query, 
             IPaginatedCriteria paginatedCriteria, CancellationToken cancellationToken = default)
         {
-            var dataTask = query.ToPage(paginatedCriteria).ToListAsync(cancellationToken);
+            var dataTask = query.ToPage(paginatedCriteria)
+                .ToListAsync(cancellationToken);
+
             var countTask = query.CountAsync(cancellationToken);
 
             await Task.WhenAll(dataTask, countTask);
@@ -66,6 +69,22 @@ namespace Alamut.Data.Paging
                 countTask.Result,
                 paginatedCriteria.CurrentPage,
                 paginatedCriteria.PageSize);
+        }
+
+
+        /// <summary>
+        /// Creates an <see cref="IPaginated{T}" /> instance from the specified query.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="query">The query.</param>
+        /// <param name="criteria"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<IPaginated<T>> ApplyDynamicPaginatedAsync<T>(this IQueryable<T> query, 
+            DynamicPaginatedCriteria criteria, CancellationToken cancellationToken)
+        {
+            return await query.ApplyDynamicCriteria(criteria)
+                .ToPaginatedAsync(criteria, cancellationToken);
         }
 
     }

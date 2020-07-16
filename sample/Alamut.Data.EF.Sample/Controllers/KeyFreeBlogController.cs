@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Alamut.Abstractions.Structure;
 using Alamut.Data.EF.Test.Database;
 using Alamut.Data.EF.Test.Models;
+using Alamut.Data.NoSql;
+using Alamut.Data.Paging;
 using Alamut.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,10 +24,15 @@ namespace Alamut.Data.EF.Sample.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<ActionResult<BlogDto>> Get()
+        public async Task<IPaginated<Blog>> Get()
         {
-            var result = await _blogRepository.GetAll<BlogDto>();
-            return Ok(result);
+            //var result = await _blogRepository.GetAll<BlogDto>();
+            //return Ok(result);
+
+            return await _blogRepository.GetPaginated(new DynamicPaginatedCriteria
+            {
+                Sorts = "Id desc"
+            });
         }
 
         // GET api/values/5

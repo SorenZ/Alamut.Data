@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Alamut.Abstractions.Structure;
+using Alamut.Data.NoSql;
 using Alamut.Data.Paging;
 using Alamut.Data.Repository;
 using Alamut.Helpers.Linq;
@@ -37,6 +38,11 @@ namespace Alamut.Data.EF
         public virtual async Task<IPaginated<TEntity>> GetPaginated(IPaginatedCriteria criteria = null,
             CancellationToken cancellationToken = default) =>
             await DbSet.ToPaginatedAsync(criteria ?? new PaginatedCriteria(), cancellationToken);
+
+        public virtual async Task<IPaginated<TEntity>> GetPaginated(DynamicPaginatedCriteria criteria, CancellationToken cancellationToken = default)
+        {
+            return await DbSet.ApplyDynamicPaginatedAsync(criteria, cancellationToken);
+        }
 
         /// <inheritdoc />
         public virtual void Add(TEntity entity) => DbSet.Add(entity);

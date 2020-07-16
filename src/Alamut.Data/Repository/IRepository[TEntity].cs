@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Alamut.Abstractions.Structure;
+using Alamut.Data.NoSql;
 using Alamut.Data.Paging;
 
 namespace Alamut.Data.Repository
@@ -32,6 +33,8 @@ namespace Alamut.Data.Repository
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<IPaginated<TEntity>> GetPaginated(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default);
+
+        Task<IPaginated<TEntity>> GetPaginated(DynamicPaginatedCriteria criteria, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// adds an Entity to the current context
