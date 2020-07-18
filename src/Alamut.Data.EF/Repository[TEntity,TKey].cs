@@ -15,7 +15,7 @@ namespace Alamut.Data.EF
 {
     public class Repository<TEntity, TKey> : Repository<TEntity>, 
         IRepository<TEntity, TKey>
-        where TEntity : class, IEntity<TKey>, new()
+        where TEntity : class, IEntity<TKey>
     {
         public Repository(DbContext dbContext) : base(dbContext)
         { }
@@ -63,5 +63,13 @@ namespace Alamut.Data.EF
 
             DbSet.Remove(entity);
         }
+
+        public virtual void DeleteByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken)
+        {
+            var entities = DbSet.Where(q => ids.Contains(q.Id));
+            
+            DbSet.RemoveRange(entities);
+        }
+      
     }
 }

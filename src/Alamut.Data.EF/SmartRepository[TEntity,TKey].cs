@@ -67,5 +67,8 @@ namespace Alamut.Data.EF
 
         public async Task DeleteById(TKey id, CancellationToken cancellationToken) =>
             await _internalRepository.DeleteById(id, cancellationToken);
+
+        public void DeleteByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken) => 
+        _internalRepository.DeleteByIds(ids, cancellationToken);
     }
 }

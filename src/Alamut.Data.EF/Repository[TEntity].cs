@@ -18,14 +18,15 @@ namespace Alamut.Data.EF
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext DbContext;
-
+        protected readonly DbSet<TEntity> DbSet;
+        
         public Repository(DbContext dbContext)
         {
             DbContext = dbContext;
             DbSet = dbContext.Set<TEntity>();
         }
 
-        protected DbSet<TEntity> DbSet;
+        
 
         /// <inheritdoc />
         public virtual IQueryable<TEntity> Queryable => DbSet;

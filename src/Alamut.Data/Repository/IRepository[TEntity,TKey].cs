@@ -60,5 +60,12 @@ namespace Alamut.Data.Repository
         /// <param name="id">the key</param>
         /// <param name="cancellationToken"></param>
         Task DeleteById(TKey id, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// deletes the Entities by ids in the current Context
+        /// </summary>
+        /// <param name="ids">the key</param>
+        /// <param name="cancellationToken"></param>
+        void DeleteByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken);
     }
 }
