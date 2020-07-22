@@ -84,7 +84,7 @@ namespace Alamut.Data.Paging
         public static async Task<IPaginated<T>> ApplyDynamicPaginatedAsync<T>(this IQueryable<T> query, 
             DynamicPaginatedCriteria criteria, CancellationToken cancellationToken)
         {
-            return await query.ApplyDynamicCriteria(criteria)
+            return await query.ApplyCriteria(criteria)
                 .ToPaginatedAsync(criteria, cancellationToken);
         }
 

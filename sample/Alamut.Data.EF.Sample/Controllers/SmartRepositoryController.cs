@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Alamut.Data.EF.Test.Database;
 using Alamut.Data.EF.Test.Models;
 using Alamut.Data.NoSql;
@@ -27,11 +28,11 @@ namespace Alamut.Data.EF.Sample.Controllers
             {
                 CurrentPage = 1,
                 PageSize = 10,
-                
+
                 Sorts = "Id desc",
-                // FilterClause = "Id == @0",
-                // FilterParameters = new object[] {1}
-            });
+                FilterClause = "Id == @0",
+                FilterParameters = new object[] {1}
+            }, CancellationToken.None);
         }
     }
 }

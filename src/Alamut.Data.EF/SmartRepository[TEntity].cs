@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Alamut.Data.NoSql;
 using Alamut.Data.Paging;
 using Alamut.Data.Repository;
 using AutoMapper;
@@ -43,12 +44,28 @@ namespace Alamut.Data.EF
                 .ProjectTo<TDto>(Mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
+        public async Task<IPaginated<TDto>> GetPaginated<TDto>(CancellationToken cancellationToken)
+        {
+            return await Queryable
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
+                .ToPaginatedAsync(new PaginatedCriteria(), 
+                    cancellationToken);
+        }
+
         /// <inheritdoc />
-        public async Task<IPaginated<TDto>> GetPaginated<TDto>(IPaginatedCriteria criteria = null, 
-            CancellationToken cancellationToken = default)=>
+        public async Task<IPaginated<TDto>> GetPaginated<TDto>(IPaginatedCriteria criteria, CancellationToken cancellationToken) =>
             await Queryable
                 .ProjectTo<TDto>(Mapper.ConfigurationProvider)
-                .ToPaginatedAsync(criteria ?? new PaginatedCriteria(), cancellationToken);
+                .ToPaginatedAsync(criteria ?? new PaginatedCriteria(), 
+                    cancellationToken);
+
+        public async Task<IPaginated<TDto>> GetPaginated<TDto>(DynamicPaginatedCriteria criteria, CancellationToken cancellationToken)
+        {
+            return await Queryable
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
+                .ApplyCriteria(criteria)
+                .ToPaginatedAsync(criteria, cancellationToken);
+        }
 
         /// <inheritdoc />
         public TEntity Add<TDto>(TDto dto)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Alamut.Data.NoSql;
 using Alamut.Data.Paging;
 
 namespace Alamut.Data.Repository
@@ -41,7 +41,11 @@ namespace Alamut.Data.Repository
         /// <param name="criteria"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IPaginated<TDto>> GetPaginated<TDto>(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default);
+        Task<IPaginated<TDto>> GetPaginated<TDto>(CancellationToken cancellationToken);
+        
+        Task<IPaginated<TDto>> GetPaginated<TDto>(IPaginatedCriteria criteria, CancellationToken cancellationToken);
+        
+        Task<IPaginated<TDto>> GetPaginated<TDto>(DynamicPaginatedCriteria criteria, CancellationToken cancellationToken);
 
         /// <summary>
         /// maps the provided DTO to the Entity and add it to the current context 

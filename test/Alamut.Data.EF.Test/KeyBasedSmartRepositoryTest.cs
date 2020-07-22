@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Alamut.Data.EF.Test.Database;
 using Alamut.Data.EF.Test.Models;
@@ -129,7 +130,7 @@ namespace Alamut.Data.EF.Test
             var expected = new Paginated<BlogViewModel>(dtoList.Take(10).ToList(), blogs.Count, 1, 10);
 
             // act
-            var actual = await repository.GetPaginated<BlogViewModel>();
+            var actual = await repository.GetPaginated<BlogViewModel>(CancellationToken.None);
 
             // assert
             Assert.Equal(expected, actual, new PaginatedEqualityComparer<BlogViewModel>());
@@ -146,7 +147,7 @@ namespace Alamut.Data.EF.Test
             var expected = new Paginated<BlogViewModel>(dtoList.Skip(10).Take(10).ToList(), blogs.Count, 2, 10);
 
             // act
-            var actual = await repository.GetPaginated<BlogViewModel>(new PaginatedCriteria(2, 10));
+            var actual = await repository.GetPaginated<BlogViewModel>(new PaginatedCriteria(2, 10), CancellationToken.None);
 
             // assert
             Assert.Equal(expected, actual, new PaginatedEqualityComparer<BlogViewModel>());
