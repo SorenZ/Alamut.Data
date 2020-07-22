@@ -8,10 +8,10 @@ namespace Alamut.Data.EF.Test.Database
 {
     public static class DbHelper
     {
-        public static AppDbContext GetInMemoryInstance()
+        public static AppDbContext GetInMemoryInstance(string databaseName = null)
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseInMemoryDatabase(databaseName ?? Guid.NewGuid().ToString())
                 .Options;
 
             var context =  new AppDbContext(options);

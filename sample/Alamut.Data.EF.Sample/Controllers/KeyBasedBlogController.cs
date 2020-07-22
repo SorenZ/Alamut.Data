@@ -22,9 +22,9 @@ namespace Alamut.Data.EF.Sample.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<ActionResult<BlogDto>> Get()
+        public async Task<ActionResult<BlogViewModel>> Get()
         {
-            var result = await _blogRepository.GetAll<BlogDto>();
+            var result = await _blogRepository.GetAll<BlogViewModel>();
             return Ok(result);
         }
 
@@ -46,7 +46,7 @@ namespace Alamut.Data.EF.Sample.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<ActionResult<Result>> Post([FromBody] BlogDto value)
+        public async Task<ActionResult<Result>> Post([FromBody] BlogViewModel value)
         {
             _blogRepository.Add(value);
             
@@ -57,7 +57,7 @@ namespace Alamut.Data.EF.Sample.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Result>> Put(int id, [FromBody] BlogDto value)
+        public async Task<ActionResult<Result>> Put(int id, [FromBody] BlogViewModel value)
         {
             await _blogRepository.UpdateById(id, value);
 

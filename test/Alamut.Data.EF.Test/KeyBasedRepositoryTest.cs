@@ -327,7 +327,7 @@ namespace Alamut.Data.EF.Test
             var expected = DbHelper.SeedSingleBlog(_dbContext);
 
             // act
-            repository.DeleteById(expected.Id);
+            await repository.DeleteById(expected.Id);
             var result = await repository.CommitAsync(CancellationToken.None);
 
             // assert

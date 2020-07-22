@@ -17,7 +17,7 @@ namespace Alamut.Data.EF.Sample
         {
             services.AddScoped<DbContext>(provider =>
             {
-                var context =  DbHelper.GetInMemoryInstance();
+                var context =  DbHelper.GetInMemoryInstance("Alamut.Data.EF.Sample");
                 return context;
             });
 
@@ -27,7 +27,7 @@ namespace Alamut.Data.EF.Sample
         {
             var configuration = new MapperConfiguration(cfg => 
             {
-                cfg.CreateMap<Blog, BlogDto>().ReverseMap();
+                cfg.CreateMap<Blog, BlogViewModel>().ReverseMap();
                 //cfg.CreateMap<Bar, BarDto>();
             });
             

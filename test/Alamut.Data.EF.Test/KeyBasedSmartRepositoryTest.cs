@@ -23,7 +23,7 @@ namespace Alamut.Data.EF.Test
 
             var configuration = new MapperConfiguration(cfg => 
             {
-                cfg.CreateMap<Blog, BlogDto>().ReverseMap();
+                cfg.CreateMap<Blog, BlogViewModel>().ReverseMap();
                 //cfg.CreateMap<Bar, BarDto>();
             });
             
@@ -39,10 +39,10 @@ namespace Alamut.Data.EF.Test
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             var entity = DbHelper.SeedSingleBlog(_dbContext);
-            var expected = _mapper.Map<BlogDto>(entity);
+            var expected = _mapper.Map<BlogViewModel>(entity);
 
             // act
-            var actual = await repository.GetById<BlogDto>(entity.Id);
+            var actual = await repository.GetById<BlogViewModel>(entity.Id);
 
             // assert
             Assert.Equal(expected, actual, new BlogDtoIEqualityComparer());
@@ -55,10 +55,10 @@ namespace Alamut.Data.EF.Test
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var entity = DbHelper.SeedSingleBlog(_dbContext);
-            var expected = _mapper.Map<BlogDto>(entity);
+            var expected = _mapper.Map<BlogViewModel>(entity);
 
             // act
-            var actual = await repository.Get<BlogDto>(q => q.Rating == entity.Rating);
+            var actual = await repository.Get<BlogViewModel>(q => q.Rating == entity.Rating);
 
             // assert
             Assert.Equal(expected, actual, new BlogDtoIEqualityComparer());
@@ -71,10 +71,10 @@ namespace Alamut.Data.EF.Test
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var entities = DbHelper.SeedBulkBlogs(_dbContext);
-            var expected = _mapper.Map<List<BlogDto>>(entities);
+            var expected = _mapper.Map<List<BlogViewModel>>(entities);
 
             // act
-            var actual = await repository.GetAll<BlogDto>();
+            var actual = await repository.GetAll<BlogViewModel>();
 
             // assert
             Assert.Equal(expected, actual, new BlogDtoIEqualityComparer());
@@ -87,10 +87,10 @@ namespace Alamut.Data.EF.Test
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var entities = DbHelper.SeedBulkBlogs(_dbContext);
-            var expected = _mapper.Map<List<BlogDto>>(entities);
+            var expected = _mapper.Map<List<BlogViewModel>>(entities);
 
             // act
-            var actual = await repository.GetMany<BlogDto>(q => true);
+            var actual = await repository.GetMany<BlogViewModel>(q => true);
 
             // assert
             Assert.Equal(expected, actual, new BlogDtoIEqualityComparer());
@@ -106,11 +106,11 @@ namespace Alamut.Data.EF.Test
             var entity2 = DbHelper.SeedSingleBlog(_dbContext);
             var ids = new[] {entity1.Id, entity2.Id};
 
-            var expected = _mapper.Map<List<BlogDto>>(new[] {entity1, entity2})
+            var expected = _mapper.Map<List<BlogViewModel>>(new[] {entity1, entity2})
                 .OrderBy(o => o.Id);
 
             // act
-            var actual = (await repository.GetByIds<BlogDto>(ids))
+            var actual = (await repository.GetByIds<BlogViewModel>(ids))
                 .OrderBy(o => o.Id);
                 
 
@@ -125,14 +125,14 @@ namespace Alamut.Data.EF.Test
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var blogs = DbHelper.SeedBulkBlogs(_dbContext);
-            var dtoList = _mapper.Map<List<BlogDto>>(blogs);
-            var expected = new Paginated<BlogDto>(dtoList.Take(10).ToList(), blogs.Count, 1, 10);
+            var dtoList = _mapper.Map<List<BlogViewModel>>(blogs);
+            var expected = new Paginated<BlogViewModel>(dtoList.Take(10).ToList(), blogs.Count, 1, 10);
 
             // act
-            var actual = await repository.GetPaginated<BlogDto>();
+            var actual = await repository.GetPaginated<BlogViewModel>();
 
             // assert
-            Assert.Equal(expected, actual, new PaginatedEqualityComparer<BlogDto>());
+            Assert.Equal(expected, actual, new PaginatedEqualityComparer<BlogViewModel>());
         }
 
         [Fact]
@@ -142,14 +142,14 @@ namespace Alamut.Data.EF.Test
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
             var blogs = DbHelper.SeedBulkBlogs(_dbContext);
-            var dtoList = _mapper.Map<List<BlogDto>>(blogs);
-            var expected = new Paginated<BlogDto>(dtoList.Skip(10).Take(10).ToList(), blogs.Count, 2, 10);
+            var dtoList = _mapper.Map<List<BlogViewModel>>(blogs);
+            var expected = new Paginated<BlogViewModel>(dtoList.Skip(10).Take(10).ToList(), blogs.Count, 2, 10);
 
             // act
-            var actual = await repository.GetPaginated<BlogDto>(new PaginatedCriteria(2, 10));
+            var actual = await repository.GetPaginated<BlogViewModel>(new PaginatedCriteria(2, 10));
 
             // assert
-            Assert.Equal(expected, actual, new PaginatedEqualityComparer<BlogDto>());
+            Assert.Equal(expected, actual, new PaginatedEqualityComparer<BlogViewModel>());
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace Alamut.Data.EF.Test
             // arrange
             var repository = new SmartRepository<Blog,int>(_dbContext, _mapper,_internalRepository);
             DbHelper.CleanBlog(_dbContext);
-            var expected = new BlogDto
+            var expected = new BlogViewModel
             {
                 Rating = 5
             };
@@ -180,7 +180,7 @@ namespace Alamut.Data.EF.Test
             var entity = DbHelper.SeedSingleBlog(_dbContext);
             _dbContext.Entry(entity).State = EntityState.Detached;
 
-            var expected = new BlogDto
+            var expected = new BlogViewModel
             {
                 Id = entity.Id,
                 Rating = 10
