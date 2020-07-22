@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
@@ -10,7 +11,7 @@ namespace Alamut.Data.EF.Test.Database
         public static AppDbContext GetInMemoryInstance()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase("test")
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
             var context =  new AppDbContext(options);

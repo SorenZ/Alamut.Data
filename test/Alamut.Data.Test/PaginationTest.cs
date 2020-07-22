@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
-using Alamut.Data.EF.Test.Database;
 using Alamut.Data.Paging;
+using Alamut.Data.Test.Database;
 using Xunit;
 
 namespace Alamut.Data.Test
 {
-    public class PagingTest
+    public class PaginationTest
     {
         private readonly AppDbContext _dbContext;
 
-        public PagingTest()
+        public PaginationTest()
         {
             _dbContext = DbHelper.GetInMemoryInstance();
         }

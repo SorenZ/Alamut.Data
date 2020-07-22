@@ -1,16 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using Microsoft.EntityFrameworkCore;
 
-namespace Alamut.Data.EF.Test.Database
+namespace Alamut.Data.Test.Database
 {
     public static class DbHelper
     {
         public static AppDbContext GetInMemoryInstance()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase("test")
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
             var context =  new AppDbContext(options);

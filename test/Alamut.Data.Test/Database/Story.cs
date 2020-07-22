@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace Alamut.Data.EF.Test.Database
+namespace Alamut.Data.Test.Database
 {
     public class Story
     {

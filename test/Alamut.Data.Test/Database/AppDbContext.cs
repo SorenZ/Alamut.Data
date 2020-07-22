@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Alamut.Data.EF.Test.Database
+namespace Alamut.Data.Test.Database
 {
     public class AppDbContext : DbContext
     {

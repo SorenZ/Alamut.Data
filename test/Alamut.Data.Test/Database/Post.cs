@@ -1,6 +1,6 @@
 using Alamut.Data.Entity;
 
-namespace Alamut.Data.EF.Test.Database
+namespace Alamut.Data.Test.Database
 {
     public class Post : IEntity
     {
