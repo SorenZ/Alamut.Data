@@ -42,7 +42,8 @@ namespace Alamut.Data.EF
 
         public virtual async Task<IPaginated<TEntity>> GetPaginated(DynamicPaginatedCriteria criteria, CancellationToken cancellationToken = default)
         {
-            return await DbSet.ApplyDynamicPaginatedAsync(criteria, cancellationToken);
+            return await DbSet.ApplyCriteria(criteria)
+                .ToPaginatedAsync(criteria, cancellationToken);
         }
 
         /// <inheritdoc />
