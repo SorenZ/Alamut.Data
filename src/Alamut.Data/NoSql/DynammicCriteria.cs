@@ -10,6 +10,7 @@ namespace Alamut.Data.NoSql
     /// </summary>
     public class DynamicCriteria
     {
+        // ReSharper disable once InvalidXmlDocComment
         /// <summary>
         /// projection
         /// used to select only specific fields for output

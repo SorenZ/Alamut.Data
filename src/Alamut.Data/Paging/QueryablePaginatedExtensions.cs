@@ -71,22 +71,5 @@ namespace Alamut.Data.Paging
                 paginatedCriteria.CurrentPage,
                 paginatedCriteria.PageSize);
         }
-
-
-        /// <summary>
-        /// Creates an <see cref="IPaginated{T}" /> instance from the specified query.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="query">The query.</param>
-        /// <param name="criteria"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        // public static async Task<IPaginated<T>> ApplyDynamicPaginatedAsync<T>(this IQueryable<T> query, 
-        //     DynamicPaginatedCriteria criteria, CancellationToken cancellationToken)
-        // {
-        //     return await query.ApplyCriteria(criteria)
-        //         .ToPaginatedAsync(criteria, cancellationToken);
-        // }
-
     }
 }

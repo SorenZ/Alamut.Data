@@ -33,7 +33,13 @@ namespace Alamut.Data.Repository
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<IPaginated<TEntity>> GetPaginated(IPaginatedCriteria criteria = null, CancellationToken cancellationToken = default);
-
+        
+        /// <summary>
+        /// gets a list of Entities in Paginated data-type filtered by provided criteria
+        /// </summary>
+        /// <param name="criteria">dynamic criteria included paging information and filter and order</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task<IPaginated<TEntity>> GetPaginated(DynamicPaginatedCriteria criteria, CancellationToken cancellationToken = default);
 
         /// <summary>
