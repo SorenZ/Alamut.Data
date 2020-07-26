@@ -8,8 +8,9 @@ Brief introduction in [Wiki](https://github.com/SorenZ/Alamut.Data/wiki)
 **Table of Content:**
 * [Installation](https://github.com/SorenZ/Alamut.Data/wiki/Installation) 
 * [Pagination](https://github.com/SorenZ/Alamut.Data/wiki/Paging)
-* [Repository[TEntity]](https://github.com/SorenZ/Alamut.Data/wiki/Repository)
-* Repository[TEntity, TKey]
-* SmartRepository[TEntity]
-* SmartRepository[TEntity, TKey]
+* [Dynamic Criteria](https://github.com/SorenZ/Alamut.Data/wiki/DynamicCriteria)
+* [Repository [TEntity]](https://github.com/SorenZ/Alamut.Data/wiki/Repository)
+* Repository [TEntity, TKey]
+* SmartRepository [TEntity]
+* SmartRepository [TEntity, TKey]
 * UnitOfWork
