@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <DebugType>full</DebugType>
 
     <PackageId>Alamut.Data</PackageId>
     <Version>4.2.2</Version>
