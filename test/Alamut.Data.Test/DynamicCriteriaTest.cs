@@ -16,7 +16,7 @@ namespace Alamut.Data.Test
         }
         
         [Fact]
-        public async void DynamicCriteriaExtensions_GetSortedItems_ReturnSortedResult()
+        public void DynamicCriteriaExtensions_GetSortedItems_ReturnSortedResult()
         {
             // arrange
             DbHelper.CleanBlog(_dbContext);
@@ -31,7 +31,7 @@ namespace Alamut.Data.Test
         }
         
         [Fact]
-        public async void DynamicCriteriaExtensions_FilterItems_ReturnFilteredResult()
+        public void DynamicCriteriaExtensions_FilterItems_ReturnFilteredResult()
         {
             // arrange
             DbHelper.CleanBlog(_dbContext);
@@ -46,7 +46,7 @@ namespace Alamut.Data.Test
         }
         
         [Fact]
-        public async void DynamicCriteriaExtensions_ApplyCriteria_ReturnFilteredResult()
+        public void DynamicCriteriaExtensions_ApplyCriteria_ReturnFilteredResult()
         {
             // arrange
             DbHelper.CleanBlog(_dbContext);
@@ -67,6 +67,34 @@ namespace Alamut.Data.Test
 
             // assert
             Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void DynamicCriteriaExtensions_ApplyDynamicPaginatedCriteria_ReturnPaginatedFilteredResult()
+        {
+            // arrange
+            DbHelper.CleanBlog(_dbContext);
+            DbHelper.SeedBulkBlogs(_dbContext);
+            
+            var filteredList = _dbContext.Blogs
+                .OrderByDescending(o => o.Id)
+                .Where(q => q.Id > 10)
+                .ToList();
+            var expected = new Paginated<Blog>(filteredList.Skip(3).Take(3).ToList(), filteredList.Count, 2, 3); 
+            
+            // act
+            var criteria = new DynamicPaginatedCriteria
+            {
+                Sorts = "Id desc",
+                FilterClause = "Id > @0",
+                FilterParameters = new object[] {10},
+                CurrentPage = 2, 
+                PageSize = 3
+            };
+            var actual = _dbContext.Blogs.ToPaginated(criteria);
+
+            // assert
+            Assert.Equal(expected, actual, new PaginatedEqualityComparer<Blog>());
         }
     }
 }
