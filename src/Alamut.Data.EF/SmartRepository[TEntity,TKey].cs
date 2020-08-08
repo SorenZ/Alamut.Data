@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Alamut.Data.EF
 {
     public class SmartRepository<TEntity, TKey> : SmartRepository<TEntity>, 
-        ISmartRepository<TEntity,TKey> where TEntity : class, IEntity<TKey>, new()
+        ISmartRepository<TEntity,TKey> where TEntity : class, IEntity<TKey>
 
     {
         private readonly IRepository<TEntity, TKey> _internalRepository;
